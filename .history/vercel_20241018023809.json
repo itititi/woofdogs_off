@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": { "useBuildUtils": true }
+    }
+  ],
+  "build": {
+    "env": {
+      "NPM_FLAGS": "--prefer-offline --no-audit --no-fund --no-optional"
+    }
+  }
+}

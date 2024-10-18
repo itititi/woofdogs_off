@@ -1,0 +1,33 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import dynamic from 'next/dynamic';
+import React from 'react';
+
+const TonConnectUIProvider = dynamic(
+  () => import('@tonconnect/ui-react').then((mod) => mod.TonConnectUIProvider),
+  { ssr: false }
+);
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: "WooDogs",
+  description: "WooDogs - TON Wallet Management",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json">
+          <React.Fragment>{children}</React.Fragment>
+        </TonConnectUIProvider>
+      </body>
+    </html>
+  );
+}

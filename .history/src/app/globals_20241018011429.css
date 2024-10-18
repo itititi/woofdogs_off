@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Стили для TonConnectButton */
+.ton-connect-button-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.ton-connect-button-wrapper > div {
+  width: 100% !important;
+}
+
+.ton-connect-button-wrapper button {
+  background-color: #0098EA !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  border-radius: 9999px !important;
+  white-space: nowrap !important;
+}
+
+.ton-connect-button-wrapper button > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ton-connect-button-wrapper button img,
+.ton-connect-button-wrapper button svg {
+  width: 24px !important;
+  height: 24px !important;
+  margin-right: 8px !important;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 100px; /* Увеличиваем отступ снизу для мобильных устройств */
+  }
+
+  .mobile-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 9999px;
+  }
+
+  .mobile-buttons > * + * {
+    margin-left: 8px;
+  }
+
+  /* Обновленн��е стили для мобильной кнопки Airdrop */
+  .mobile-buttons .bg-gradient-to-r {
+    padding: 8px 16px !important;
+  }
+}
+
+/* Оптизация для iPhone 15 */
+@media screen and (max-width: 390px) {
+  .text-5xl {
+    font-size: 2.5rem;
+  }
+
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+
+  .text-xl {
+    font-size: 1.25rem;
+  }
+
+  .py-20 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .mb-8 {
+    margin-bottom: 1.5rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+
+  .mb-10 {
+    margin-bottom: 2rem;
+  }
+
+  .space-y-1 > * + * {
+    margin-top: 0.25rem;
+  }
+
+  .h-16 {
+    height: 3.5rem;
+  }
+}
+
+/* Добавьте эти стили в конец файла */
+.bg-gradient-to-r {
+  background-size: 200% auto;
+  transition: background-position 0.3s ease;
+}
+
+.bg-gradient-to-r:hover {
+  background-position: right center;
+}
+
+/* Обновленные стили для кнопки TonConnect */
+#ton-connect-button button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px !important;
+  min-width: 100px !important;
+  height: 36px !important;
+  border-radius: 18px !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  background-color: #31A6F5 !important;
+  transition: background-color 0.3s ease !important;
+}
+
+#ton-connect-button button:hover {
+  background-color: #2691D9 !important;
+}
+
+/* Стили для мобильной версии */
+@media (max-width: 1023px) {
+  #ton-connect-button {
+    width: 120px !important;
+  }
+
+  #ton-connect-button button {
+    font-size: 12px !important;
+    padding: 0 8px !important;
+  }
+}
+
+/* Дополнительные стили для iPhone 15 */
+@media screen and (max-width: 390px) {
+  #ton-connect-button {
+    width: 100px !important;
+  }
+
+  #ton-connect-button button {
+    font-size: 11px !important;
+    padding: 0 6px !important;
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(123,97,255,0.5);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(123,97,255,0.8), 0 0 40px rgba(123,97,255,0.3);
+  }
+}
