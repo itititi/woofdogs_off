@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Header from '../../components/Header';
+import Header from '@/components/Header';
 import Image from 'next/image';
 
 const slogans = [
@@ -112,119 +112,106 @@ const AirdropPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 py-4 mt-8 xl:py-8 xl:mt-16">
-        <RainbowText />
-        
-        <div className="mb-8">
-          <div className="flex justify-center border-b border-[#333333]">
-            <button
-              className={`py-2 px-4 ${activeTab === 'mint' ? 'border-b-2 border-[#999999]' : ''}`}
-              onClick={() => setActiveTab('mint')}
-            >
-              Mint $WOOF
-            </button>
-            <button
-              className={`py-2 px-4 ${activeTab === 'invite' ? 'border-b-2 border-[#999999]' : ''}`}
-              onClick={() => setActiveTab('invite')}
-            >
-              Invite & Earn
-            </button>
+      <main className="flex-grow py-6 px-4 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
+        <div className="max-w-6xl mx-auto">
+          <RainbowText />
+          
+          <div className="mb-8">
+            <div className="flex justify-center border-b border-[#3A3A3E]">
+              <button
+                className={`py-2 px-4 ${activeTab === 'mint' ? 'text-[#2AABEE] border-b-2 border-[#2AABEE]' : 'text-gray-400 hover:text-white'}`}
+                onClick={() => setActiveTab('mint')}
+              >
+                Mint $WOOF
+              </button>
+              <button
+                className={`py-2 px-4 ${activeTab === 'invite' ? 'text-[#2AABEE] border-b-2 border-[#2AABEE]' : 'text-gray-400 hover:text-white'}`}
+                onClick={() => setActiveTab('invite')}
+              >
+                Invite & Earn
+              </button>
+            </div>
           </div>
-        </div>
 
-        {activeTab === 'mint' && (
-          <section className="mb-12 text-center">
-            <div className="max-w-4xl mx-auto bg-[#1E1E1E] shadow-xl rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl border border-[#333333] xl:max-w-5xl">
-              <div className="p-8">
-                <h2 className="text-3xl font-bold mb-6 text-[#E0E0E0]">Mint $WOOF Tokens</h2>
-                <div className="mb-6">
+          {activeTab === 'mint' && (
+            <div className="bg-[#1C1C1E] rounded-lg overflow-hidden shadow-2xl p-6 sm:p-8 mb-6 border border-[#3A3A3E]">
+              <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
+                <div className="mb-6 md:mb-0 md:w-1/3">
                   <Image 
                     src="/dogs.gif" 
                     alt="Dogs GIF" 
-                    width={150} 
-                    height={150} 
-                    className="mx-auto rounded-lg"
+                    width={300} 
+                    height={300} 
+                    className="rounded-lg shadow-lg"
                     priority
                   />
                 </div>
-                <p className="text-xl mb-8 text-[#CCCCCC]">
-                  Mint 1000 $WOOF tokens and get a chance to win a random wallet with $86k-$120k worth of tokens!
-                </p>
-                <button
-                  onClick={handleMint}
-                  className="bg-[#333333] text-white py-3 px-12 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 hover:bg-[#444444] hover:scale-105"
-                >
-                  Mint $WOOF
-                </button>
-                {mintResult && (
-                  <p className="mt-6 text-xl font-semibold text-[#E0E0E0]">{mintResult}</p>
-                )}
-                <p className="mt-8 text-sm text-[#999999] max-w-2xl mx-auto">
-                  <span className="font-semibold text-[#CCCCCC]">Warning:</span> By participating, you acknowledge that you&apos;re risking your funds. You may win or lose your investment. Proceed at your own risk.
-                </p>
-              </div>
-              <div className="bg-[#2A2A2A] p-6">
-                <h3 className="text-xl font-semibold mb-4 text-[#E0E0E0]">Why Mint $WOOF?</h3>
-                <ul className="text-left list-disc list-inside space-y-2 text-[#CCCCCC]">
-                  <li>Chance to win up to $120k worth of tokens</li>
-                  <li>Join a thriving community of WOOF holders</li>
-                  <li>Participate in exclusive WOOF events and airdrops</li>
-                  <li>Be part of the future of decentralized finance</li>
-                </ul>
+                <div className="md:w-2/3">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-[#2AABEE] mb-4">Mint $WOOF Tokens</h2>
+                  <p className="text-xl mb-6 text-gray-300">
+                    Mint 1000 $WOOF tokens and get a chance to win a random wallet with $86k-$120k worth of tokens!
+                  </p>
+                  <button
+                    onClick={handleMint}
+                    className="w-full bg-gradient-to-r from-[#2AABEE] to-[#229ED9] text-white text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl mb-4"
+                  >
+                    Mint $WOOF
+                  </button>
+                  {mintResult && (
+                    <p className="text-xl font-semibold text-[#2AABEE] mb-4">{mintResult}</p>
+                  )}
+                  <p className="text-sm text-gray-400">
+                    <span className="font-semibold text-gray-300">Warning:</span> By participating, you acknowledge that you're risking your funds. You may win or lose your investment. Proceed at your own risk.
+                  </p>
+                </div>
               </div>
             </div>
-          </section>
-        )}
+          )}
 
-        {activeTab === 'invite' && (
-          <section className="mb-12 text-center">
-            <div className="max-w-4xl mx-auto bg-[#1E1E1E] shadow-xl rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl border border-[#333333] xl:max-w-5xl">
-              <div className="p-8">
-                <h2 className="text-3xl font-bold mb-6 text-[#E0E0E0]">Invite & Earn</h2>
-                <div className="mb-6">
+          {activeTab === 'invite' && (
+            <div className="bg-[#1C1C1E] rounded-lg overflow-hidden shadow-2xl p-6 sm:p-8 mb-6 border border-[#3A3A3E]">
+              <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
+                <div className="mb-6 md:mb-0 md:w-1/3">
                   <Image 
                     src="/invite.gif" 
                     alt="Invite GIF" 
-                    width={150} 
-                    height={150} 
-                    className="mx-auto rounded-lg"
+                    width={300} 
+                    height={300} 
+                    className="rounded-lg shadow-lg"
                     priority
                   />
                 </div>
-                <p className="text-xl mb-8 text-[#CCCCCC]">
-                  Invite your friends and earn additional $WOOF tokens! For each friend who successfully mints $WOOF tokens, you&apos;ll receive a 5% bonus.
-                </p>
-                <div className="bg-[#2A2A2A] p-4 mb-6 text-left rounded-lg">
-                  <p className="font-semibold mb-2 text-[#E0E0E0]">Your Referral Link:</p>
-                  <input
-                    type="text"
-                    value="https://woodogs.com/airdrop?ref=YOUR_ID"
-                    readOnly
-                    className="w-full bg-[#333333] text-[#E0E0E0] py-2 px-3 rounded border border-[#444444]"
-                  />
+                <div className="md:w-2/3">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-[#2AABEE] mb-4">Invite & Earn</h2>
+                  <p className="text-xl mb-6 text-gray-300">
+                    Invite your friends and earn additional $WOOF tokens! For each friend who successfully mints $WOOF tokens, you'll receive a 5% bonus.
+                  </p>
+                  <div className="bg-[#2A2A2E] p-4 mb-6 rounded-lg">
+                    <p className="font-semibold mb-2 text-gray-200">Your Referral Link:</p>
+                    <div className="flex">
+                      <input
+                        type="text"
+                        value="https://woodogs.com/airdrop?ref=YOUR_ID"
+                        readOnly
+                        className="w-full bg-[#1C1C1E] text-gray-200 py-2 px-3 rounded-l border border-[#3A3A3E]"
+                      />
+                      <button
+                        className="bg-[#2AABEE] text-white px-4 py-2 rounded-r hover:bg-[#229ED9] transition-colors duration-300"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    Share your referral link with friends to start earning bonuses!
+                  </p>
                 </div>
-                <button
-                  className="bg-[#333333] text-white py-3 px-12 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 hover:bg-[#444444] hover:scale-105"
-                >
-                  Copy Link
-                </button>
-                <p className="mt-8 text-sm text-[#999999] max-w-2xl mx-auto">
-                  Share your referral link with friends to start earning bonuses!
-                </p>
-              </div>
-              <div className="bg-[#2A2A2A] p-6">
-                <h3 className="text-xl font-semibold mb-4 text-[#E0E0E0]">Your Referral Stats</h3>
-                <ul className="text-left list-disc list-inside space-y-2 text-[#CCCCCC]">
-                  <li>Invited Friends: 0</li>
-                  <li>Total Bonus Earned: 0 $WOOF</li>
-                  <li>Potential Earnings: Unlimited!</li>
-                </ul>
               </div>
             </div>
-          </section>
-        )}
+          )}
+        </div>
       </main>
     </div>
   );
