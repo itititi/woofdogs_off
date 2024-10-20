@@ -3,24 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Avatar from 'boring-avatars';
-import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
-import User from 'lucide-react/dist/esm/icons/user';
-import Settings from 'lucide-react/dist/esm/icons/settings';
-import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import { useRouter } from 'next/navigation';
 
 const TonConnectButton: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [address, setAddress] = useState('');
-  const [profileId, setProfileId] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const savedProfile = sessionStorage.getItem('profileData');
     if (savedProfile) {
-      const { address, id } = JSON.parse(savedProfile);
+      const { address } = JSON.parse(savedProfile);
       setIsConnected(true);
       setAddress(address);
-      setProfileId(id);
     }
   }, []);
 
@@ -36,15 +32,21 @@ const TonConnectButton: React.FC = () => {
     setIsLoading(false);
     setIsConnected(true);
     setAddress(newAddress);
-    setProfileId(newProfileId);
     sessionStorage.setItem('profileData', JSON.stringify({ address: newAddress, id: newProfileId }));
   };
 
   const handleDisconnect = () => {
     setIsConnected(false);
     setAddress('');
-    setProfileId('');
     sessionStorage.removeItem('profileData');
+  };
+
+  const handleProfileClick = () => {
+    router.push('/profile');
+  };
+
+  const handleSettingsClick = () => {
+    router.push('/settings');
   };
 
   if (!isConnected) {
@@ -79,8 +81,8 @@ const TonConnectButton: React.FC = () => {
             variant="beam"
             colors={['#2AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
           />
-          <span className="ml-2">{address.slice(0, 4)}...{address.slice(-3)}</span>
-          <ChevronDown className="ml-2 h-4 w-4" />
+          <span className="ml-2 mr-1">{address.slice(0, 4)}...{address.slice(-3)}</span>
+          <span className="h-4 w-4">▼</span>
         </Menu.Button>
       </div>
       <Transition
@@ -91,16 +93,21 @@ const TonConnectButton: React.FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-[#2A2A2E] border border-[#3A3A3E] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="px-1 py-1">
+        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-xl bg-[#2A2A2E] border border-[#3A3A3E] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-[#3A3A3E]">
+          <div className="px-4 py-3">
+            <p className="text-sm text-gray-400">Signed in as</p>
+            <p className="text-sm font-medium text-white truncate">{address}</p>
+          </div>
+          <div className="py-1">
             <Menu.Item>
               {({ active }) => (
                 <button
+                  onClick={handleProfileClick}
                   className={`${
                     active ? 'bg-[#3A3A3E] text-white' : 'text-gray-300'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  } group flex w-full items-center px-4 py-2 text-sm`}
                 >
-                  <User className="mr-2 h-5 w-5" />
+                  <span className="mr-3">👤</span>
                   Profile
                 </button>
               )}
@@ -108,34 +115,31 @@ const TonConnectButton: React.FC = () => {
             <Menu.Item>
               {({ active }) => (
                 <button
+                  onClick={handleSettingsClick}
                   className={`${
                     active ? 'bg-[#3A3A3E] text-white' : 'text-gray-300'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  } group flex w-full items-center px-4 py-2 text-sm`}
                 >
-                  <Settings className="mr-2 h-5 w-5" />
+                  <span className="mr-3">⚙️</span>
                   Settings
                 </button>
               )}
             </Menu.Item>
           </div>
-          <div className="border-t border-[#3A3A3E] px-1 py-1">
+          <div className="py-1">
             <Menu.Item>
               {({ active }) => (
                 <button
                   onClick={handleDisconnect}
                   className={`${
-                    active ? 'bg-red-700 text-white' : 'text-red-400'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors duration-150 ease-in-out hover:bg-red-600`}
+                    active ? 'bg-red-600 text-white' : 'text-red-400'
+                  } group flex w-full items-center px-4 py-2 text-sm`}
                 >
-                  <LogOut className="mr-2 h-5 w-5" />
+                  <span className="mr-3">🚪</span>
                   Disconnect
                 </button>
               )}
             </Menu.Item>
-          </div>
-          <div className="px-2 py-1 text-xs text-gray-500 flex justify-between items-center">
-            <span>ID:</span>
-            <span className="font-mono">{profileId}</span>
           </div>
         </Menu.Items>
       </Transition>
