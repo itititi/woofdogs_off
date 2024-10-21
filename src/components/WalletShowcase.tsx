@@ -4,59 +4,41 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { finalWalletOffers, WalletOffer } from '@/data/walletOffers';
-import { Calendar } from 'lucide-react';
 import WalletCardSkeleton from './WalletCardSkeleton';
 import { useSearch } from './SearchContext';
 
 interface WalletCardProps {
   offer: WalletOffer;
-  tonAmount: string;
 }
 
-const WalletCard: React.FC<WalletCardProps> = ({ offer, tonAmount }) => {
+const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
   return (
     <Link href={`/wallet/${offer.id}`}>
-      <div className="bg-[#1C1C1E] rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl flex flex-col h-full cursor-pointer border border-[#2A2A2E]">
+      <div className="bg-[#141414] rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl flex flex-col h-full cursor-pointer border border-[#2A2A2E]">
         <div className="p-6 flex flex-col flex-grow">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-lg overflow-hidden mr-4">
+              <div className="w-12 h-12 rounded-[22%] overflow-hidden mr-4">
                 <Image src={offer.icon} alt={offer.name} width={48} height={48} className="object-cover" />
               </div>
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-[#2AABEE] to-[#1E88E5] text-transparent bg-clip-text">
-                {offer.name}
-              </h3>
+              <h3 className="text-xl font-bold text-[#3AABEE]">{offer.name}</h3>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-yellow-400 font-semibold text-sm bg-yellow-400/10 px-2 py-1 rounded-full">
-                {offer.priceRange}
-              </span>
-              {offer.isHot ? (
-                <span className="text-orange-500 font-semibold text-sm bg-orange-500/10 px-2 py-1 rounded-full">
-                  🔥
-                </span>
-              ) : (
-                <span className="text-green-500 font-semibold text-sm bg-green-500/10 px-2 py-1 rounded-full">
-                  🐸
-                </span>
-              )}
-            </div>
+            <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full">
+              {offer.priceRange}
+            </span>
           </div>
-          <div className="flex items-center text-gray-400 mb-4">
-            <Calendar className="w-4 h-4 mr-2" />
-            <span className="text-sm">{offer.createdAt}</span>
+          <div className="flex items-center text-gray-300 mb-2 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+            </svg>
+            <span>{offer.createdAt}</span>
           </div>
-          <p className="text-gray-300 mb-6 flex-grow">{offer.description}</p>
+          <p className="text-gray-300 text-sm mb-4 flex-grow">{offer.description}</p>
           <div className="flex justify-between items-center mt-auto">
-            <div>
-              <span className="text-2xl font-bold text-white">${offer.priceUSD}</span>
-              <span className="text-sm text-gray-400 ml-2">
-                ≈ {tonAmount} TON
-              </span>
-            </div>
+            <span className="text-lg font-bold text-white">${offer.priceUSD}</span>
             <div className="flex items-center">
-              <span className="text-gray-400 mr-2 text-sm">Available:</span>
-              <span className="text-green-500 font-semibold">{offer.available}</span>
+              <span className="text-gray-300 mr-2 text-sm">Available:</span>
+              <span className="text-green-400 font-semibold">{offer.available}</span>
             </div>
           </div>
         </div>
@@ -132,16 +114,16 @@ const WalletShowcase: React.FC = () => {
   return (
     <div className="bg-black py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-[#2AABEE] to-[#1E88E5] text-transparent bg-clip-text mb-8 text-center">Hot TON Wallets</h2>
+        <h2 className="text-3xl font-bold text-[#3AABEE] mb-8 text-center">Hot TON Wallets</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} tonAmount={offer.tonAmount} />)}
+          {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
         </div>
         
         <div className="border-t border-[#2A2A2E] my-16"></div>
         
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-[#2AABEE] to-[#1E88E5] text-transparent bg-clip-text mb-8 text-center">More TON Wallets</h2>
+        <h2 className="text-3xl font-bold text-[#3AABEE] mb-8 text-center">More TON Wallets</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {regularOffers.map((offer) => <WalletCard key={offer.id} offer={offer} tonAmount={offer.tonAmount} />)}
+          {regularOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
         </div>
       </div>
     </div>

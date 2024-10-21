@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Avatar from 'boring-avatars';
+import { Calendar, Eye } from 'lucide-react';
 import { WalletOffer } from '@/data/walletOffers';
 import { getWalletData } from '@/data/getWalletData';
 
@@ -45,13 +46,13 @@ const ProfilePage: React.FC = () => {
   }
 
   const renderWalletCard = (wallet: WalletOffer, isPurchase: boolean) => (
-    <div key={wallet.id} className="bg-[#141414] rounded-lg overflow-hidden shadow-md p-4 border border-[#2A2A2E] mb-4">
+    <div key={wallet.id} className="bg-[#1C1C1E] rounded-lg overflow-hidden shadow-md p-4 border border-[#3A3A3E] mb-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-[22%] overflow-hidden mr-3">
+          <div className="w-10 h-10 rounded-lg overflow-hidden mr-3">
             <Image src={wallet.icon} alt={wallet.name} width={40} height={40} className="object-cover" />
           </div>
-          <h3 className="text-lg font-bold text-[#3AABEE]">{wallet.name}</h3>
+          <h3 className="text-lg font-bold text-[#2AABEE]">{wallet.name}</h3>
         </div>
         <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full">
           {wallet.priceRange}
@@ -61,14 +62,12 @@ const ProfilePage: React.FC = () => {
       <div className="flex items-center text-gray-300 mb-2 text-sm">
         {isPurchase ? (
           <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#2AABEE]" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-            </svg>
+            <Calendar className="w-4 h-4 mr-2" />
             <span>Purchased: {wallet.createdAt}</span>
           </>
         ) : (
           <>
-            <span className="w-4 h-4 mr-2">👁️</span>
+            <Eye className="w-4 h-4 mr-2" />
             <span>Viewed recently</span>
           </>
         )}
@@ -80,9 +79,7 @@ const ProfilePage: React.FC = () => {
         <span className="text-lg font-bold text-white">${wallet.priceUSD}</span>
         {isPurchase && (
           <div className="flex items-center text-green-500 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
+            <span className="w-4 h-4 mr-1">✓</span>
             <span>Delivered</span>
           </div>
         )}
@@ -91,21 +88,21 @@ const ProfilePage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-black text-white">
       <Header />
-      <main className="flex-grow py-6 px-4 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
+      <main className="container mx-auto px-4 py-6 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-xl p-6 mb-6 border border-[#2A2A2E]">
+          <div className="bg-[#1C1C1E] rounded-lg overflow-hidden shadow-xl p-6 mb-6 border border-[#3A3A3E]">
             <div className="flex flex-col sm:flex-row items-center sm:items-start mb-6">
               <Avatar
                 size={80}
                 name={address}
                 variant="beam"
-                colors={['#3AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
+                colors={['#2AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
                 className="mb-4 sm:mb-0 sm:mr-6"
               />
               <div className="text-center sm:text-left">
-                <h1 className="text-2xl font-bold text-[#3AABEE] mb-1">
+                <h1 className="text-2xl font-bold text-[#2AABEE] mb-1">
                   {address}
                 </h1>
                 <p className="text-gray-300 text-sm">ID: {profileId}</p>
@@ -117,7 +114,7 @@ const ProfilePage: React.FC = () => {
                 onClick={() => setActiveTab('purchases')}
                 className={`px-4 py-2 font-semibold text-sm ${
                   activeTab === 'purchases'
-                    ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]'
+                    ? 'text-[#2AABEE] border-b-2 border-[#2AABEE]'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -127,7 +124,7 @@ const ProfilePage: React.FC = () => {
                 onClick={() => setActiveTab('history')}
                 className={`px-4 py-2 font-semibold text-sm ${
                   activeTab === 'history'
-                    ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]'
+                    ? 'text-[#2AABEE] border-b-2 border-[#2AABEE]'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -140,14 +137,7 @@ const ProfilePage: React.FC = () => {
               {activeTab === 'history' && (
                 viewHistory.length > 0 
                   ? viewHistory.map((wallet) => renderWalletCard(wallet, false))
-                  : <div className="col-span-full bg-[#1A1A1A] rounded-lg p-4 text-center">
-                      <Image 
-                        src="/history.gif" 
-                        alt="История просмотров" 
-                        width={120} 
-                        height={120} 
-                        className="mx-auto mb-4"
-                      />
+                  : <div className="col-span-full bg-[#2A2A2E] rounded-lg p-4 text-center">
                       <p className="text-gray-300 text-sm">You haven't viewed any offers yet.</p>
                     </div>
               )}
