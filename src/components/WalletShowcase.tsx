@@ -21,7 +21,7 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
               <div className="w-12 h-12 rounded-[22%] overflow-hidden mr-4">
                 <Image src={offer.icon} alt={offer.name} width={48} height={48} className="object-cover" />
               </div>
-              <h3 className="text-xl font-bold text-[#3AABEE]">{offer.name}</h3>
+              <h3 className="text-xl font-bold titanium-gradient">{offer.name}</h3>
             </div>
             <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full">
               {offer.priceRange}
@@ -35,7 +35,7 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
           </div>
           <p className="text-gray-300 text-sm mb-4 flex-grow">{offer.description}</p>
           <div className="flex justify-between items-center mt-auto">
-            <span className="text-lg font-bold text-white">${offer.priceUSD}</span>
+            <span className="text-lg font-bold titanium-gradient">${offer.priceUSD}</span>
             <div className="flex items-center">
               <span className="text-gray-300 mr-2 text-sm">Available:</span>
               <span className="text-green-400 font-semibold">{offer.available}</span>
@@ -114,18 +114,46 @@ const WalletShowcase: React.FC = () => {
   return (
     <div className="bg-black py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-[#3AABEE] mb-8 text-center">Hot TON Wallets</h2>
+        <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">Hot TON Wallets</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
         </div>
         
         <div className="border-t border-[#2A2A2E] my-16"></div>
         
-        <h2 className="text-3xl font-bold text-[#3AABEE] mb-8 text-center">More TON Wallets</h2>
+        <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">More TON Wallets</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {regularOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
         </div>
       </div>
+      <style jsx global>{`
+        .titanium-gradient {
+          background: linear-gradient(
+            45deg,
+            #E8E8E8,
+            #D3D3D3,
+            #BEBEBE,
+            #A9A9A9
+          );
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: titanium 10s ease infinite;
+        }
+
+        @keyframes titanium {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
     </div>
   );
 };

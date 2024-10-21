@@ -51,7 +51,7 @@ const ProfilePage: React.FC = () => {
           <div className="w-10 h-10 rounded-[22%] overflow-hidden mr-3">
             <Image src={wallet.icon} alt={wallet.name} width={40} height={40} className="object-cover" />
           </div>
-          <h3 className="text-lg font-bold text-[#3AABEE]">{wallet.name}</h3>
+          <h3 className="text-lg font-bold titanium-gradient">{wallet.name}</h3>
         </div>
         <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full">
           {wallet.priceRange}
@@ -61,14 +61,17 @@ const ProfilePage: React.FC = () => {
       <div className="flex items-center text-gray-300 mb-2 text-sm">
         {isPurchase ? (
           <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#2AABEE]" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
             </svg>
             <span>Purchased: {wallet.createdAt}</span>
           </>
         ) : (
           <>
-            <span className="w-4 h-4 mr-2">👁️</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+              <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+            </svg>
             <span>Viewed recently</span>
           </>
         )}
@@ -77,7 +80,7 @@ const ProfilePage: React.FC = () => {
       <p className="text-gray-300 text-sm mb-2 line-clamp-2">{wallet.description}</p>
       
       <div className="flex justify-between items-center">
-        <span className="text-lg font-bold text-white">${wallet.priceUSD}</span>
+        <span className="text-lg font-bold titanium-gradient">${wallet.priceUSD}</span>
         {isPurchase && (
           <div className="flex items-center text-green-500 text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -105,7 +108,7 @@ const ProfilePage: React.FC = () => {
                 className="mb-4 sm:mb-0 sm:mr-6"
               />
               <div className="text-center sm:text-left">
-                <h1 className="text-2xl font-bold text-[#3AABEE] mb-1">
+                <h1 className="text-2xl font-bold titanium-gradient mb-1">
                   {address}
                 </h1>
                 <p className="text-gray-300 text-sm">ID: {profileId}</p>
@@ -155,6 +158,34 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </main>
+      <style jsx global>{`
+        .titanium-gradient {
+          background: linear-gradient(
+            45deg,
+            #E8E8E8,
+            #D3D3D3,
+            #BEBEBE,
+            #A9A9A9
+          );
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: titanium 10s ease infinite;
+        }
+
+        @keyframes titanium {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
     </div>
   );
 };
