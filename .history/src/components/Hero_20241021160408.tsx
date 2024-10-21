@@ -70,8 +70,8 @@ const Hero: React.FC = () => {
         <div className="text-center">
           <div className="mb-4 transition-all duration-300" style={{ height: `${gifSize}px` }}>
             <Image 
-              src="/flag.gif" 
-              alt="Flag GIF" 
+              src="/tonhero.gif" 
+              alt="TON Hero GIF" 
               width={160} 
               height={160} 
               className="mx-auto object-contain rounded-[22%]"
