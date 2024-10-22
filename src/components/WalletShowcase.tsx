@@ -12,6 +12,45 @@ interface WalletCardProps {
 }
 
 const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
+  const [timeLeft, setTimeLeft] = useState<string>('');
+  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+
+  const auctionEndTime = useMemo(() => {
+    if (typeof window === 'undefined') return 0;
+    const storedEndTime = localStorage.getItem(`auctionEndTime_${offer.id}`);
+    if (storedEndTime) {
+      return parseInt(storedEndTime, 10);
+    }
+    const seed = offer.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const random = Math.sin(seed) * 10000;
+    const hours = Math.floor(random % 48); // От 0 до 47 часов
+    const endTime = Date.now() + hours * 3600000;
+    localStorage.setItem(`auctionEndTime_${offer.id}`, endTime.toString());
+    return endTime;
+  }, [offer.id]);
+
+  useEffect(() => {
+    const updateTimer = () => {
+      const now = Date.now();
+      const difference = auctionEndTime - now;
+
+      if (difference <= 0) {
+        setIsAuctionEnded(true);
+        setTimeLeft('Ended');
+      } else {
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        setTimeLeft(`${hours}h ${minutes}m`);
+        setIsAuctionEnded(false);
+      }
+    };
+
+    updateTimer();
+    const timer = setInterval(updateTimer, 60000); // Обновляем каждую минуту
+
+    return () => clearInterval(timer);
+  }, [auctionEndTime]);
+
   return (
     <Link href={`/wallet/${offer.id}`}>
       <div className="bg-[#141414] rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl flex flex-col h-full cursor-pointer border border-[#2A2A2E]">
@@ -37,8 +76,8 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
           <div className="flex justify-between items-center mt-auto">
             <span className="text-lg font-bold titanium-gradient">${offer.priceUSD}</span>
             <div className="flex items-center">
-              <span className="text-gray-300 mr-2 text-sm">Available:</span>
-              <span className="text-green-400 font-semibold">{offer.available}</span>
+              <span className="text-gray-300 mr-2 text-sm">Bid ends:</span>
+              <span className={`font-semibold ${isAuctionEnded ? 'text-red-500' : 'text-[#FFA500]'}`}>{timeLeft}</span>
             </div>
           </div>
         </div>
