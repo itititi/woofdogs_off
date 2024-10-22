@@ -330,3 +330,13 @@ body {
     padding-right: 1rem;
   }
 }
+
+/* Add this to the end of the file */
+html, body {
+  background-color: black;
+  color: white;
+}
+
+body {
+  transition: background-color 0.3s ease;
+}

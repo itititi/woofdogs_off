@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import WalletSkeleton from '@/components/WalletSkeleton';
 import { WalletOffer } from '@/data/walletOffers';
+import Link from 'next/link';
 
 interface WalletPageProps {
   params: {
@@ -207,9 +208,11 @@ export default function WalletPage({ params }: WalletPageProps) {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <button className="flex-1 bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
-                Buy Now for ${wallet.priceUSD}
-              </button>
+              <Link href={`/payment/${wallet.id}`} passHref>
+                <button className="flex-1 bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+                  Buy Now for ${wallet.priceUSD}
+                </button>
+              </Link>
               <button 
                 className={`flex-1 bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B4513] text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl ${isAuctionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={isAuctionEnded}

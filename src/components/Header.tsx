@@ -12,6 +12,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop' | 'large'>('desktop');
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const checkDeviceType = () => {
@@ -28,6 +29,13 @@ const Header: React.FC = () => {
     };
     checkDeviceType();
     window.addEventListener('resize', checkDeviceType);
+
+    // Восстановление состояния подключения
+    const savedConnectionState = localStorage.getItem('walletConnected');
+    if (savedConnectionState === 'true') {
+      setIsConnected(true);
+    }
+
     return () => window.removeEventListener('resize', checkDeviceType);
   }, []);
 
@@ -41,8 +49,19 @@ const Header: React.FC = () => {
 
   const isMobileOrTablet = deviceType === 'mobile' || deviceType === 'tablet';
 
+  const handleConnect = () => {
+    setIsConnected(true);
+    localStorage.setItem('walletConnected', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsConnected(false);
+    setIsDropdownOpen(false);
+    localStorage.removeItem('walletConnected');
+  };
+
   const renderDropdown = () => (
-    <div className={`absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-[#1A1A1A] ring-1 ring-black ring-opacity-5`}>
+    <div className={`${isMobileOrTablet ? 'absolute bottom-full mb-2' : 'absolute top-full mt-2'} right-0 w-48 rounded-md shadow-lg bg-[#1A1A1A] ring-1 ring-black ring-opacity-5`}>
       <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
         <Link href="/profile" className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#2A2A2E] hover:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -50,14 +69,45 @@ const Header: React.FC = () => {
           </svg>
           Profile
         </Link>
-        <a href="#" className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#2A2A2E] hover:text-white">
+        <button 
+          onClick={handleLogout}
+          className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#2A2A2E] hover:text-white"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
           </svg>
           Logout
-        </a>
+        </button>
       </div>
     </div>
+  );
+
+  const renderConnectWallet = () => (
+    <button
+      onClick={handleConnect}
+      className="bg-[#31A6F5] text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-[#2995E0] transition-colors duration-300 h-10 flex items-center justify-center"
+    >
+      Connect Wallet
+    </button>
+  );
+
+  const renderConnectedWallet = () => (
+    <button 
+      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      className="bg-[#1A1A1A] text-white py-2 px-4 rounded-full text-sm font-semibold flex items-center hover:bg-[#2A2A2E] transition-colors duration-300 h-10"
+    >
+      <Avatar
+        size={24}
+        name="EQD....abc"
+        variant="beam"
+        colors={['#3AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
+        className="mr-2"
+      />
+      <span>EQD....abc</span>
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+      </svg>
+    </button>
   );
 
   return (
@@ -99,23 +149,8 @@ const Header: React.FC = () => {
             <div className="flex items-center space-x-4">
               {!isMobileOrTablet && (
                 <div className="relative">
-                  <button 
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="bg-[#1A1A1A] text-white py-2 px-4 rounded-full text-sm font-semibold flex items-center"
-                  >
-                    <Avatar
-                      size={24}
-                      name="EQD....abc"
-                      variant="beam"
-                      colors={['#3AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
-                      className="mr-2"
-                    />
-                    <span>EQD....abc</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                  {isDropdownOpen && renderDropdown()}
+                  {isConnected ? renderConnectedWallet() : renderConnectWallet()}
+                  {isConnected && isDropdownOpen && renderDropdown()}
                 </div>
               )}
               {isMobileOrTablet && (
@@ -164,23 +199,8 @@ const Header: React.FC = () => {
       {isMobileOrTablet && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-black bg-opacity-80 rounded-full p-2 shadow-lg relative">
-            <button 
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="bg-[#1A1A1A] text-white py-2 px-4 rounded-full text-sm font-semibold flex items-center"
-            >
-              <Avatar
-                size={24}
-                name="EQD....abc"
-                variant="beam"
-                colors={['#3AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
-                className="mr-2"
-              />
-              <span>EQD....abc</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-            {isDropdownOpen && renderDropdown()}
+            {isConnected ? renderConnectedWallet() : renderConnectWallet()}
+            {isConnected && isDropdownOpen && renderDropdown()}
           </div>
         </div>
       )}

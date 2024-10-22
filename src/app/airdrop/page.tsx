@@ -138,13 +138,13 @@ const AirdropPage: React.FC = () => {
           {activeTab === 'mint' && (
             <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 mb-6 border border-[#2A2A2E]">
               <div className="flex flex-col items-center sm:flex-row sm:items-start sm:space-x-6">
-                <div className="mb-4 sm:mb-0 w-full sm:w-1/3">
+                <div className="mb-4 sm:mb-0 w-full sm:w-1/3 h-48 sm:h-64">
                   <Image 
                     src="/dogs.gif" 
                     alt="Dogs GIF" 
                     width={300} 
                     height={300} 
-                    className="rounded-lg shadow-lg w-full h-auto"
+                    className="rounded-lg shadow-lg w-full h-full object-cover"
                     priority
                   />
                 </div>
@@ -173,13 +173,13 @@ const AirdropPage: React.FC = () => {
           {activeTab === 'invite' && (
             <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 mb-6 border border-[#2A2A2E]">
               <div className="flex flex-col items-center sm:flex-row sm:items-start sm:space-x-6">
-                <div className="mb-4 sm:mb-0 w-full sm:w-1/3">
+                <div className="mb-4 sm:mb-0 w-full sm:w-1/3 h-48 sm:h-64">
                   <Image 
                     src="/invite.gif" 
                     alt="Invite GIF" 
                     width={300} 
                     height={300} 
-                    className="rounded-lg shadow-lg w-full h-auto"
+                    className="rounded-lg shadow-lg w-full h-full object-cover"
                     priority
                   />
                 </div>

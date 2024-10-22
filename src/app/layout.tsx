@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SearchProvider } from '@/components/SearchContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link rel="preload" href="/dogs.gif" as="image" />
         <link rel="preload" href="/invite.gif" as="image" />
         <link rel="preload" href="/flag.gif" as="image" />
@@ -28,8 +27,9 @@ export default function RootLayout({
         <link rel="preload" href="/notfound.gif" as="image" />
         <link rel="preload" href="/dogs.webp" as="image" />
         <link rel="preload" href="/invite.webp" as="image" />
-      </Head>
-      <body className={`${inter.className} bg-black`}>
+        <link rel="preload" href="/success.gif" as="image" />
+      </head>
+      <body className={`${inter.className} bg-black text-white`}>
         <LanguageProvider>
           <SearchProvider>
             {children}
