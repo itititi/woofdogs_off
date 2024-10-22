@@ -137,16 +137,31 @@ const seedRandom = (seed: number) => {
 // Создаем дополнительные предложения для раздела "More TON Wallets"
 const createMoreOffers = (baseOffers: WalletOffer[]): WalletOffer[] => {
   const moreOffers: WalletOffer[] = [];
-  const seed = hashString("WooDogs More Offers"); // Фиксированный сид для табильного порядка
+  const seed = hashString("WooDogs More Offers");
+  const now = new Date();
+  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+  const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
 
   for (let i = 0; i < 14; i++) {
     const baseOffer = baseOffers[i % 3];
+    const isNew = seedRandom(seed + i) < 0.3; // 30% шанс быть новым предложением
+
+    let createdAt: Date;
+    if (isNew) {
+      // Новые предложения созданы от 0 до 2 дней назад
+      createdAt = new Date(twoDaysAgo.getTime() + seedRandom(seed + i * 2) * 2 * 24 * 60 * 60 * 1000);
+    } else {
+      // Старые предложения созданы от 1 месяца до 1 месяца и 7 дней назад
+      const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+      createdAt = new Date(oneMonthAgo.getTime() - seedRandom(seed + i * 3) * sevenDaysInMs);
+    }
+
     const newOffer: WalletOffer = {
       ...baseOffer,
       id: `${baseOffer.id}-${i + 2}`,
-      isHot: false,
+      isHot: isNew, // Новые предложения помечаются как "горячие"
       available: `${Math.floor(seedRandom(seed + i * 2) * 50 + 10)}/${Math.floor(seedRandom(seed + i * 3) * 50 + 50)}`,
-      createdAt: new Date(Date.now() - seedRandom(seed + i * 4) * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      createdAt: createdAt.toISOString().split('T')[0],
       tokens: baseOffer.tokens.map(t => ({
         ...t,
         ...generateTokenData(t.token, hashString(t.token.symbol + i))

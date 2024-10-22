@@ -36,7 +36,8 @@ const Header: React.FC = () => {
     { href: '/', label: 'TON Wallets', isActive: pathname === '/' },
     { label: 'Ethereum Wallets', soon: true },
     { label: 'Solana Wallets', soon: true },
-    { href: '#', label: 'Support' },
+    { href: 'https://t.me/woodogs_support', label: 'Support', external: true },
+    { href: '/airdrop', label: 'Airdrop', isButton: true },
   ], [pathname]);
 
   const isMobileOrTablet = deviceType === 'mobile' || deviceType === 'tablet';
@@ -72,26 +73,31 @@ const Header: React.FC = () => {
             {!isMobileOrTablet && (
               <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
                 {navItems.map((item, index) => (
-                  <Link 
-                    key={index}
-                    href={item.href || '#'}
-                    className={`text-sm xl:text-base font-medium ${
-                      item.isActive ? 'text-[#3AABEE]' : 'text-white hover:text-[#3AABEE]'
-                    } ${item.soon ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    {item.label}
-                    {item.soon && <span className="ml-1 text-xs bg-[#2A2A2E] px-1 py-0.5 rounded">Soon</span>}
-                  </Link>
+                  item.isButton ? (
+                    <Link key={index} href={item.href}>
+                      <button className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white py-2 px-6 rounded-full text-sm font-semibold relative overflow-hidden group transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg">
+                        <span className="relative z-10">{item.label}</span>
+                        <span className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-x"></span>
+                      </button>
+                    </Link>
+                  ) : (
+                    <Link 
+                      key={index}
+                      href={item.href || '#'}
+                      className={`text-sm xl:text-base font-medium ${
+                        item.isActive ? 'text-[#3AABEE]' : 'text-white hover:text-[#3AABEE]'
+                      } ${item.soon ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      target={item.external ? "_blank" : undefined}
+                      rel={item.external ? "noopener noreferrer" : undefined}
+                    >
+                      {item.label}
+                      {item.soon && <span className="ml-1 text-xs bg-[#2A2A2E] px-1 py-0.5 rounded">Soon</span>}
+                    </Link>
+                  )
                 ))}
               </nav>
             )}
             <div className="flex items-center space-x-4">
-              <Link href="/airdrop">
-                <button className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white py-2 px-6 rounded-full text-sm font-semibold relative overflow-hidden group transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg">
-                  <span className="relative z-10">Airdrop</span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-x"></span>
-                </button>
-              </Link>
               {!isMobileOrTablet && (
                 <div className="relative">
                   <button 
@@ -127,17 +133,30 @@ const Header: React.FC = () => {
           <div className="max-w-md mx-auto px-4 py-6">
             <nav className="flex flex-col space-y-4">
               {navItems.map((item, index) => (
-                <Link 
-                  key={index}
-                  href={item.href || '#'}
-                  className={`text-lg font-semibold ${
-                    item.isActive ? 'text-[#3AABEE]' : 'text-white'
-                  } ${item.soon ? 'opacity-50' : ''}`}
-                  onClick={() => item.soon ? null : setIsMenuOpen(false)}
-                >
-                  {item.label}
-                  {item.soon && <span className="ml-2 text-xs bg-[#2A2A2E] px-1 py-0.5 rounded">Soon</span>}
-                </Link>
+                item.isButton ? (
+                  <Link 
+                    key={index}
+                    href={item.href}
+                    className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white py-2 px-6 rounded-full text-sm font-semibold text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <Link 
+                    key={index}
+                    href={item.href || '#'}
+                    className={`text-lg font-semibold ${
+                      item.isActive ? 'text-[#3AABEE]' : 'text-white'
+                    } ${item.soon ? 'opacity-50' : ''}`}
+                    onClick={() => item.soon ? null : setIsMenuOpen(false)}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener noreferrer" : undefined}
+                  >
+                    {item.label}
+                    {item.soon && <span className="ml-2 text-xs bg-[#2A2A2E] px-1 py-0.5 rounded">Soon</span>}
+                  </Link>
+                )
               ))}
             </nav>
           </div>

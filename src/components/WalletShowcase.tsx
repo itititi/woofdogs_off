@@ -111,25 +111,57 @@ const WalletShowcase: React.FC = () => {
     );
   }
 
+  if (filteredOffers.length === 0) {
+    return (
+      <div className="bg-black pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto w-full text-center">
+          <div className="mb-4 transition-all duration-300" style={{ height: '160px' }}>
+            <Image 
+              src="/notfound.gif" 
+              alt="Not Found" 
+              width={160} 
+              height={160} 
+              className="mx-auto object-contain rounded-[22%]"
+            />
+          </div>
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
+            <span className="titanium-gradient">Oops, nothing found</span>
+          </h2>
+          <p className="text-sm sm:text-base mb-4 text-gray-300 max-w-2xl mx-auto">
+            We couldn't find any wallets matching your search. Try different keywords or browse our available options.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-black py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">Hot TON Wallets</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
-        </div>
+        {hotOffers.length > 0 && (
+          <>
+            <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">Hot TON Wallets</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
+            </div>
+            
+            <div className="border-t border-[#2A2A2E] my-16"></div>
+          </>
+        )}
         
-        <div className="border-t border-[#2A2A2E] my-16"></div>
-        
-        <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">More TON Wallets</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {regularOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
-        </div>
+        {regularOffers.length > 0 && (
+          <>
+            <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">More TON Wallets</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {regularOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
+            </div>
+          </>
+        )}
       </div>
       <style jsx global>{`
         .titanium-gradient {
           background: linear-gradient(
-            45deg,
+             45deg,
             #E8E8E8,
             #D3D3D3,
             #BEBEBE,

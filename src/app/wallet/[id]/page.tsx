@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { getWalletData } from '@/data/getWalletData';
 import { useRouter } from 'next/navigation';
@@ -32,6 +32,30 @@ export default function WalletPage({ params }: WalletPageProps) {
   const [tonAmount, setTonAmount] = useState<string>('N/A');
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [timeLeft, setTimeLeft] = useState<string>('');
+  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+
+  const additionalTokensCount = useMemo(() => {
+    if (!wallet) return 5;
+    // Используем id кошелька для генерации псевдослучайного числа
+    const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return 5 + (seed % 6); // Генерируем число от 5 до 10
+  }, [params.id, wallet]);
+
+  const auctionEndTime = useMemo(() => {
+    if (typeof window === 'undefined') return 0;
+    const storedEndTime = localStorage.getItem(`auctionEndTime_${params.id}`);
+    if (storedEndTime) {
+      return parseInt(storedEndTime, 10);
+    }
+    // Если нет сохраненного времени, генерируем новое
+    const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const random = Math.sin(seed) * 10000;
+    const hours = Math.floor(random % 48); // От 0 до 47 часов
+    const endTime = Date.now() + hours * 3600000;
+    localStorage.setItem(`auctionEndTime_${params.id}`, endTime.toString());
+    return endTime;
+  }, [params.id]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +81,29 @@ export default function WalletPage({ params }: WalletPageProps) {
 
     fetchData();
   }, [params.id, router]);
+
+  useEffect(() => {
+    const updateTimer = () => {
+      const now = Date.now();
+      const difference = auctionEndTime - now;
+
+      if (difference <= 0) {
+        setIsAuctionEnded(true);
+        setTimeLeft('Auction ended');
+      } else {
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        setTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+        setIsAuctionEnded(false);
+      }
+    };
+
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(timer);
+  }, [auctionEndTime]);
 
   const handleClose = () => {
     router.push('/');
@@ -134,9 +181,13 @@ export default function WalletPage({ params }: WalletPageProps) {
                   ≈ {tonAmount} TON
                 </span>
               </div>
-              <div className="flex items-center">
-                <span className="text-gray-300 mr-2 text-sm sm:text-base">Available:</span>
-                <span className="text-green-400 font-semibold text-base sm:text-lg">{wallet.available}</span>
+              <div className="flex flex-col items-end">
+                <span className="text-gray-300 text-sm sm:text-base">
+                  {isAuctionEnded ? 'Auction ended' : 'Auction ends in:'}
+                </span>
+                <span className="font-semibold text-base sm:text-lg text-[#FFA500]">
+                  {timeLeft}
+                </span>
               </div>
             </div>
 
@@ -158,15 +209,23 @@ export default function WalletPage({ params }: WalletPageProps) {
                 ))}
                 <div className="bg-[#1A1A1A] rounded-lg p-2 flex items-center justify-center shadow-md">
                   <span className="font-medium text-sm text-[#3AABEE]">
-                    8 more...
+                    {additionalTokensCount} more...
                   </span>
                 </div>
               </div>
             </div>
             
-            <button className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
-              Order Now and Get Instant Access
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <button className="flex-1 bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+                Buy Now for ${wallet.priceUSD}
+              </button>
+              <button 
+                className={`flex-1 bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B4513] text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl ${isAuctionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isAuctionEnded}
+              >
+                Place Bid
+              </button>
+            </div>
           </div>
 
           {/* Card for wallet contents */}
