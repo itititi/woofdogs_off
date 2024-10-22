@@ -110,16 +110,7 @@ export default function WalletPage({ params }: WalletPageProps) {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black text-white flex flex-col">
-        <Header />
-        <main className="flex-grow py-6 px-4 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
-          <div className="max-w-6xl mx-auto">
-            <WalletSkeleton />
-          </div>
-        </main>
-      </div>
-    );
+    return <WalletSkeleton />;
   }
 
   if (!wallet) {
@@ -131,21 +122,21 @@ export default function WalletPage({ params }: WalletPageProps) {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-6 px-4 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-6 sm:p-8 mb-6 sm:mb-8 border border-[#2A2A2E] relative">
+      <main className="flex-grow py-4 px-4 mt-16 sm:mt-20 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 mb-6 border border-[#2A2A2E] relative">
             <button 
               onClick={handleClose}
               className="absolute top-2 right-2 text-gray-400 hover:text-white transition-colors duration-200"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
             </button>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
               <div className="flex items-center mb-4 sm:mb-0">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[22%] overflow-hidden mr-4 shadow-lg">
-                  <Image src={wallet.icon} alt={wallet.name} width={64} height={64} className="object-cover" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[22%] overflow-hidden mr-4 shadow-lg">
+                  <Image src={wallet.icon} alt={wallet.name} width={80} height={80} className="object-cover" />
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-bold titanium-gradient">{wallet.name}</h1>
               </div>
@@ -172,7 +163,7 @@ export default function WalletPage({ params }: WalletPageProps) {
               <span className="text-sm">Created on {wallet.createdAt}</span>
             </div>
             
-            <p className="text-gray-300 text-base sm:text-lg mb-6 leading-relaxed">{wallet.description}</p>
+            <p className="text-gray-300 text-base mb-6 leading-relaxed">{wallet.description}</p>
             
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 bg-[#1A1A1A] p-4 rounded-lg shadow-inner">
               <div className="mb-2 sm:mb-0">
@@ -181,7 +172,7 @@ export default function WalletPage({ params }: WalletPageProps) {
                   ≈ {tonAmount} TON
                 </span>
               </div>
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col items-start sm:items-end">
                 <span className="text-gray-300 text-sm sm:text-base">
                   {isAuctionEnded ? 'Auction ended' : 'Auction ends in:'}
                 </span>
@@ -194,21 +185,21 @@ export default function WalletPage({ params }: WalletPageProps) {
             {/* Tokens list */}
             <div className="mb-6">
               <h3 className="text-lg sm:text-xl font-bold titanium-gradient mb-3">Included Tokens</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
                 {wallet.tokens.map((tokenData, index) => (
                   <div key={index} className="bg-[#1A1A1A] rounded-lg p-2 flex items-center shadow-md">
                     <Image
                       src={tokenData.token.logo}
                       alt={tokenData.token.name}
-                      width={24}
-                      height={24}
+                      width={20}
+                      height={20}
                       className="rounded-full mr-2"
                     />
-                    <span className="font-medium text-sm">{tokenData.token.symbol}</span>
+                    <span className="font-medium text-xs sm:text-sm">{tokenData.token.symbol}</span>
                   </div>
                 ))}
                 <div className="bg-[#1A1A1A] rounded-lg p-2 flex items-center justify-center shadow-md">
-                  <span className="font-medium text-sm text-[#3AABEE]">
+                  <span className="font-medium text-xs sm:text-sm text-[#3AABEE]">
                     {additionalTokensCount} more...
                   </span>
                 </div>
@@ -229,7 +220,7 @@ export default function WalletPage({ params }: WalletPageProps) {
           </div>
 
           {/* Card for wallet contents */}
-          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-6 sm:p-8 border border-[#2A2A2E]">
+          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 border border-[#2A2A2E]">
             <div className="flex items-center mb-4 sm:mb-6">
               <Image
                 src="/inside.gif"

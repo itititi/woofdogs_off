@@ -51,14 +51,14 @@ const ProfilePage: React.FC = () => {
           <div className="w-10 h-10 rounded-[22%] overflow-hidden mr-3">
             <Image src={wallet.icon} alt={wallet.name} width={40} height={40} className="object-cover" />
           </div>
-          <h3 className="text-lg font-bold titanium-gradient">{wallet.name}</h3>
+          <h3 className="text-base sm:text-lg font-bold titanium-gradient">{wallet.name}</h3>
         </div>
         <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full">
           {wallet.priceRange}
         </span>
       </div>
       
-      <div className="flex items-center text-gray-300 mb-2 text-sm">
+      <div className="flex items-center text-gray-300 mb-2 text-xs sm:text-sm">
         {isPurchase ? (
           <>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
@@ -77,12 +77,12 @@ const ProfilePage: React.FC = () => {
         )}
       </div>
       
-      <p className="text-gray-300 text-sm mb-2 line-clamp-2">{wallet.description}</p>
+      <p className="text-gray-300 text-xs sm:text-sm mb-2 line-clamp-2">{wallet.description}</p>
       
       <div className="flex justify-between items-center">
-        <span className="text-lg font-bold titanium-gradient">${wallet.priceUSD}</span>
+        <span className="text-base sm:text-lg font-bold titanium-gradient">${wallet.priceUSD}</span>
         {isPurchase && (
-          <div className="flex items-center text-green-500 text-sm">
+          <div className="flex items-center text-green-500 text-xs sm:text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
@@ -96,29 +96,29 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-6 px-4 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-xl p-6 mb-6 border border-[#2A2A2E]">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start mb-6">
+      <main className="flex-grow py-4 px-4 mt-16 sm:mt-20 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-xl p-4 sm:p-6 mb-6 border border-[#2A2A2E]">
+            <div className="flex flex-col items-center mb-6">
               <Avatar
-                size={80}
+                size={64}
                 name={address}
                 variant="beam"
                 colors={['#3AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
-                className="mb-4 sm:mb-0 sm:mr-6"
+                className="mb-4"
               />
-              <div className="text-center sm:text-left">
-                <h1 className="text-2xl font-bold titanium-gradient mb-1">
-                  {address}
+              <div className="text-center">
+                <h1 className="text-xl sm:text-2xl font-bold titanium-gradient mb-1">
+                  {address.slice(0, 6)}...{address.slice(-4)}
                 </h1>
-                <p className="text-gray-300 text-sm">ID: {profileId}</p>
+                <p className="text-gray-300 text-xs sm:text-sm">ID: {profileId}</p>
               </div>
             </div>
 
-            <div className="flex justify-center sm:justify-start mb-6">
+            <div className="flex justify-center mb-6">
               <button
                 onClick={() => setActiveTab('purchases')}
-                className={`px-4 py-2 font-semibold text-sm ${
+                className={`px-3 py-2 font-semibold text-xs sm:text-sm ${
                   activeTab === 'purchases'
                     ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]'
                     : 'text-gray-400 hover:text-white'
@@ -128,7 +128,7 @@ const ProfilePage: React.FC = () => {
               </button>
               <button
                 onClick={() => setActiveTab('history')}
-                className={`px-4 py-2 font-semibold text-sm ${
+                className={`px-3 py-2 font-semibold text-xs sm:text-sm ${
                   activeTab === 'history'
                     ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]'
                     : 'text-gray-400 hover:text-white'
@@ -138,7 +138,7 @@ const ProfilePage: React.FC = () => {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {activeTab === 'purchases' && purchases.map((wallet) => renderWalletCard(wallet, true))}
               {activeTab === 'history' && (
                 viewHistory.length > 0 
@@ -147,11 +147,11 @@ const ProfilePage: React.FC = () => {
                       <Image 
                         src="/history.gif" 
                         alt="История просмотров" 
-                        width={120} 
-                        height={120} 
+                        width={80} 
+                        height={80} 
                         className="mx-auto mb-4"
                       />
-                      <p className="text-gray-300 text-sm">You haven't viewed any offers yet.</p>
+                      <p className="text-gray-300 text-xs sm:text-sm">You haven't viewed any offers yet.</p>
                     </div>
               )}
             </div>

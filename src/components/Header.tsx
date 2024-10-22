@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
-import TonConnectButton from './TonConnectButton';
 import Avatar from 'boring-avatars';
 
 const Header: React.FC = () => {
@@ -43,7 +42,7 @@ const Header: React.FC = () => {
   const isMobileOrTablet = deviceType === 'mobile' || deviceType === 'tablet';
 
   const renderDropdown = () => (
-    <div className={`${isMobileOrTablet ? 'absolute bottom-full mb-2' : 'absolute top-full mt-2'} right-0 w-48 rounded-md shadow-lg bg-[#1A1A1A] ring-1 ring-black ring-opacity-5`}>
+    <div className={`absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-[#1A1A1A] ring-1 ring-black ring-opacity-5`}>
       <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
         <Link href="/profile" className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#2A2A2E] hover:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -165,7 +164,23 @@ const Header: React.FC = () => {
       {isMobileOrTablet && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-black bg-opacity-80 rounded-full p-2 shadow-lg relative">
-            <TonConnectButton />
+            <button 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="bg-[#1A1A1A] text-white py-2 px-4 rounded-full text-sm font-semibold flex items-center"
+            >
+              <Avatar
+                size={24}
+                name="EQD....abc"
+                variant="beam"
+                colors={['#3AABEE', '#229ED9', '#1E88E5', '#1976D2', '#1565C0']}
+                className="mr-2"
+              />
+              <span>EQD....abc</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+            {isDropdownOpen && renderDropdown()}
           </div>
         </div>
       )}

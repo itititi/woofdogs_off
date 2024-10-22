@@ -175,8 +175,9 @@ const WalletShowcase: React.FC = () => {
   }
 
   return (
-    <div className="bg-black py-16 px-4 sm:px-6 lg:px-8">
+    <div className="bg-black pt-4 sm:pt-6 md:pt-8 lg:pt-10 xl:pt-12 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+        <div className="border-t border-[#2A2A2E] mb-8"></div>
         {hotOffers.length > 0 && (
           <>
             <h2 className="text-3xl font-bold titanium-gradient mb-8 text-center">Hot TON Wallets</h2>

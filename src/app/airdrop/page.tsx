@@ -32,17 +32,17 @@ const RainbowText: React.FC = () => {
   }, []);
 
   const getColor = (index: number) => {
-    const colors = ['#D3D3D3', '#A9A9A9', '#808080']; // Светло-серый, темно-серый, серый
+    const colors = ['#D3D3D3', '#A9A9A9', '#808080'];
     return colors[(index + offset) % 3];
   };
 
-  const repeatedSlogans = [...slogans, ...slogans]; // Повторяем слоганы для непрерывной анимации
+  const repeatedSlogans = [...slogans, ...slogans];
 
   return (
-    <div className="overflow-hidden py-6">
+    <div className="overflow-hidden py-4 sm:py-6">
       <div className="whitespace-nowrap inline-block animate-marquee">
         {repeatedSlogans.map((slogan, sloganIndex) => (
-          <span key={sloganIndex} className="inline-block mx-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold">
+          <span key={sloganIndex} className="inline-block mx-4 sm:mx-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold">
             {slogan.split('').map((char, charIndex) => (
               <span
                 key={charIndex}
@@ -114,20 +114,20 @@ const AirdropPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-6 px-4 mt-16 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
-        <div className="max-w-6xl mx-auto">
+      <main className="flex-grow py-4 px-4 mt-16 sm:mt-20 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
+        <div className="max-w-3xl mx-auto">
           <RainbowText />
           
-          <div className="mb-8">
+          <div className="mb-6">
             <div className="flex justify-center border-b border-[#2A2A2E]">
               <button
-                className={`py-2 px-4 ${activeTab === 'mint' ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]' : 'text-gray-400 hover:text-white'}`}
+                className={`py-2 px-4 text-sm sm:text-base ${activeTab === 'mint' ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]' : 'text-gray-400 hover:text-white'}`}
                 onClick={() => setActiveTab('mint')}
               >
                 Mint $WOOF
               </button>
               <button
-                className={`py-2 px-4 ${activeTab === 'invite' ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]' : 'text-gray-400 hover:text-white'}`}
+                className={`py-2 px-4 text-sm sm:text-base ${activeTab === 'invite' ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]' : 'text-gray-400 hover:text-white'}`}
                 onClick={() => setActiveTab('invite')}
               >
                 Invite & Earn
@@ -136,33 +136,33 @@ const AirdropPage: React.FC = () => {
           </div>
 
           {activeTab === 'mint' && (
-            <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-6 sm:p-8 mb-6 border border-[#2A2A2E]">
-              <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
-                <div className="mb-6 md:mb-0 md:w-1/3">
+            <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 mb-6 border border-[#2A2A2E]">
+              <div className="flex flex-col items-center sm:flex-row sm:items-start sm:space-x-6">
+                <div className="mb-4 sm:mb-0 w-full sm:w-1/3">
                   <Image 
                     src="/dogs.gif" 
                     alt="Dogs GIF" 
                     width={300} 
                     height={300} 
-                    className="rounded-lg shadow-lg"
+                    className="rounded-lg shadow-lg w-full h-auto"
                     priority
                   />
                 </div>
-                <div className="md:w-2/3">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-[#3AABEE] mb-4">Mint $WOOF Tokens</h2>
-                  <p className="text-xl mb-6 text-gray-300">
+                <div className="w-full sm:w-2/3">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#3AABEE] mb-3">Mint $WOOF Tokens</h2>
+                  <p className="text-sm sm:text-base mb-4 text-gray-300">
                     Mint 1000 $WOOF tokens and get a chance to win a random wallet with $86k-$120k worth of tokens!
                   </p>
                   <button
                     onClick={handleMint}
-                    className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl mb-4"
+                    className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-sm sm:text-base font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl mb-4"
                   >
                     Mint $WOOF
                   </button>
                   {mintResult && (
-                    <p className="text-xl font-semibold text-[#3AABEE] mb-4">{mintResult}</p>
+                    <p className="text-sm sm:text-base font-semibold text-[#3AABEE] mb-4">{mintResult}</p>
                   )}
-                  <p className="text-sm text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-400">
                     <span className="font-semibold text-gray-300">Warning:</span> By participating, you acknowledge that you're risking your funds. You may win or lose your investment. Proceed at your own risk.
                   </p>
                 </div>
@@ -171,40 +171,40 @@ const AirdropPage: React.FC = () => {
           )}
 
           {activeTab === 'invite' && (
-            <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-6 sm:p-8 mb-6 border border-[#2A2A2E]">
-              <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
-                <div className="mb-6 md:mb-0 md:w-1/3">
+            <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 mb-6 border border-[#2A2A2E]">
+              <div className="flex flex-col items-center sm:flex-row sm:items-start sm:space-x-6">
+                <div className="mb-4 sm:mb-0 w-full sm:w-1/3">
                   <Image 
                     src="/invite.gif" 
                     alt="Invite GIF" 
                     width={300} 
                     height={300} 
-                    className="rounded-lg shadow-lg"
+                    className="rounded-lg shadow-lg w-full h-auto"
                     priority
                   />
                 </div>
-                <div className="md:w-2/3">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-[#3AABEE] mb-4">Invite & Earn</h2>
-                  <p className="text-xl mb-6 text-gray-300">
+                <div className="w-full sm:w-2/3">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#3AABEE] mb-3">Invite & Earn</h2>
+                  <p className="text-sm sm:text-base mb-4 text-gray-300">
                     Invite your friends and earn additional $WOOF tokens! For each friend who successfully mints $WOOF tokens, you'll receive a 5% bonus.
                   </p>
-                  <div className="bg-[#1A1A1A] p-4 mb-6 rounded-lg">
-                    <p className="font-semibold mb-2 text-gray-200">Your Referral Link:</p>
+                  <div className="bg-[#1A1A1A] p-3 sm:p-4 mb-4 rounded-lg">
+                    <p className="font-semibold mb-2 text-xs sm:text-sm text-gray-200">Your Referral Link:</p>
                     <div className="flex">
                       <input
                         type="text"
                         value="https://woodogs.com/airdrop?ref=YOUR_ID"
                         readOnly
-                        className="w-full bg-[#141414] text-gray-200 py-2 px-3 rounded-l border border-[#2A2A2E]"
+                        className="w-full bg-[#141414] text-gray-200 py-2 px-3 rounded-l border border-[#2A2A2E] text-xs sm:text-sm"
                       />
                       <button
-                        className="bg-[#3AABEE] text-white px-4 py-2 rounded-r hover:bg-[#1E90FF] transition-colors duration-300"
+                        className="bg-[#3AABEE] text-white px-3 sm:px-4 py-2 rounded-r hover:bg-[#1E90FF] transition-colors duration-300 text-xs sm:text-sm"
                       >
                         Copy
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-400">
                     Share your referral link with friends to start earning bonuses!
                   </p>
                 </div>
@@ -213,6 +213,34 @@ const AirdropPage: React.FC = () => {
           )}
         </div>
       </main>
+      <style jsx global>{`
+        .titanium-gradient {
+          background: linear-gradient(
+            45deg,
+            #E8E8E8,
+            #D3D3D3,
+            #BEBEBE,
+            #A9A9A9
+          );
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: titanium 10s ease infinite;
+        }
+
+        @keyframes titanium {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
     </div>
   );
 };

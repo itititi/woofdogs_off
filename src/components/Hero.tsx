@@ -12,7 +12,7 @@ const SearchBar: React.FC = () => {
       <input
         type="text"
         placeholder="Search wallets"
-        className="w-full py-2 px-4 pr-10 rounded-full bg-[#141414] text-white placeholder-gray-400 focus:outline-none text-sm h-10 leading-tight border border-[#2A2A2E]"
+        className="w-full py-2 px-4 pr-10 rounded-full bg-[#141414] text-white placeholder-gray-400 focus:outline-none text-sm h-10 leading-tight border border-[#2A2A2E] text-[16px]"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -51,31 +51,17 @@ const AnimatedTitle: React.FC = () => {
 };
 
 const Hero: React.FC = () => {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const gifSize = Math.max(160 - scrollY / 2, 80); // Уменьшаем размер GIF от 160px до минимум 80px
-
   return (
-    <div className="bg-black pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+    <div className="bg-black pt-20 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto w-full">
         <div className="text-center">
-          <div className="mb-4 transition-all duration-300" style={{ height: `${gifSize}px` }}>
+          <div className="mb-4">
             <Image 
               src="/flag.gif" 
               alt="Flag GIF" 
               width={160} 
               height={160} 
               className="mx-auto object-contain rounded-[22%]"
-              style={{ width: `${gifSize}px`, height: `${gifSize}px` }}
             />
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
