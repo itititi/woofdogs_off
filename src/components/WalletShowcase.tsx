@@ -71,20 +71,12 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
               </div>
               <h3 className="text-lg font-bold titanium-gradient">{offer.name}</h3>
             </div>
-          </div>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center text-gray-300 text-xs">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-              </svg>
-              <span>{offer.createdAt}</span>
-            </div>
-            <div className="flex space-x-1">
-              <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full">
+            <div className="flex items-center space-x-2">
+              <span className="text-yellow-400 font-semibold text-xs bg-yellow-400/10 px-2 py-1 rounded-full whitespace-nowrap">
                 {offer.priceRange}
               </span>
               {offer.isHot && (
-                <span className="text-orange-500 font-semibold text-xs bg-orange-500/10 px-2 py-1 rounded-full">
+                <span className="text-orange-500 font-semibold text-xs bg-orange-500/10 px-2 py-1 rounded-full whitespace-nowrap">
                   🔥 Hot
                 </span>
               )}
@@ -120,13 +112,7 @@ const WalletCardSkeleton: React.FC = () => {
             <div className="w-12 h-12 bg-gray-700 rounded-[22%] mr-3"></div>
             <div className="h-6 w-24 bg-gray-700 rounded"></div>
           </div>
-        </div>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center">
-            <div className="w-4 h-4 bg-gray-700 rounded-full mr-2"></div>
-            <div className="h-4 w-20 bg-gray-700 rounded"></div>
-          </div>
-          <div className="flex space-x-1">
+          <div className="flex space-x-2">
             <div className="h-6 w-16 bg-gray-700 rounded-full"></div>
             <div className="h-6 w-12 bg-gray-700 rounded-full"></div>
           </div>
@@ -199,7 +185,7 @@ const WalletShowcase: React.FC = () => {
       <div className="bg-black flex-grow pt-6 pb-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="border-t border-[#2A2A2E] mb-6"></div>
-          <h2 className="text-2xl font-bold titanium-gradient mb-4 text-center">Hot TON Wallets</h2>
+          <h2 className="text-2xl font-bold titanium-gradient mb-4 text-center">Горячие TON кошельки</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
             {[...Array(4)].map((_, index) => (
               <WalletCardSkeleton key={index} />
@@ -208,7 +194,7 @@ const WalletShowcase: React.FC = () => {
           
           <div className="border-t border-[#2A2A2E] my-6"></div>
           
-          <h2 className="text-2xl font-bold titanium-gradient mb-4 text-center">More TON Wallets</h2>
+          <h2 className="text-2xl font-bold titanium-gradient mb-4 text-center">Больше TON кошельков</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {[...Array(8)].map((_, index) => (
               <WalletCardSkeleton key={index} />

@@ -34,11 +34,14 @@ export default function WalletPage({ params }: WalletPageProps) {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+  const [bidPrice, setBidPrice] = useState<number | null>(null);
+  const [blitzPrice, setBlitzPrice] = useState<number | null>(null);
 
   const additionalTokensCount = useMemo(() => {
     if (!wallet) return 5;
+    // Используем id кошелька для генерации псевдослучайного числа
     const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return 5 + (seed % 6);
+    return 5 + (seed % 6); // Генерируем число от 5 до 10
   }, [params.id, wallet]);
 
   const auctionEndTime = useMemo(() => {
@@ -47,9 +50,10 @@ export default function WalletPage({ params }: WalletPageProps) {
     if (storedEndTime) {
       return parseInt(storedEndTime, 10);
     }
+    // Если нет сохраненного времени, генерируем новое
     const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const random = Math.sin(seed) * 10000;
-    const hours = Math.floor(random % 48);
+    const hours = Math.floor(random % 48); // От 0 до 47 часов
     const endTime = Date.now() + hours * 3600000;
     localStorage.setItem(`auctionEndTime_${params.id}`, endTime.toString());
     return endTime;
@@ -65,6 +69,15 @@ export default function WalletPage({ params }: WalletPageProps) {
       }
       setWallet(walletData);
 
+      const storedBidPrice = localStorage.getItem(`bidPrice_${params.id}`);
+      if (storedBidPrice) {
+        setBidPrice(parseFloat(storedBidPrice));
+      } else {
+        const newBidPrice = Math.round(walletData.priceUSD * (1.05 + Math.random() * 0.1)); // 105-115% от priceUSD
+        setBidPrice(newBidPrice);
+        localStorage.setItem(`bidPrice_${params.id}`, newBidPrice.toString());
+      }
+
       try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
@@ -73,6 +86,10 @@ export default function WalletPage({ params }: WalletPageProps) {
       } catch (error) {
         console.error('Error fetching TON price:', error);
       }
+
+      // Генерация цен
+      const basePrice = walletData.priceUSD;
+      setBlitzPrice(Math.round(basePrice * 1.2)); // Блиц-цена еще выше
 
       setIsLoading(false);
     };
@@ -116,7 +133,6 @@ export default function WalletPage({ params }: WalletPageProps) {
   }
 
   const walletContents = getWalletContents(wallet.name);
-  const buyNowPrice = Math.round((wallet.priceUSD + wallet.auctionPriceUSD) / 2);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -124,65 +140,97 @@ export default function WalletPage({ params }: WalletPageProps) {
       <main className="flex-grow py-4 px-4 mt-16 overflow-y-auto">
         <div className="max-w-3xl mx-auto">
           <div className="bg-[#141414] rounded-2xl overflow-hidden shadow-2xl p-4 mb-4 border border-[#2A2A2E] relative">
-            <button 
-              onClick={handleClose}
-              className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors duration-200"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-            
+            <div className="flex justify-end mb-2">
+              <button 
+                onClick={handleClose}
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <div className="w-16 h-16 rounded-[22%] overflow-hidden mr-4 shadow-lg">
                   <Image src={wallet.icon} alt={wallet.name} width={64} height={64} className="object-cover" />
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold titanium-gradient">{wallet.name}</h1>
-                  <div className="flex items-center mt-1">
-                    <span className="text-yellow-400 font-semibold text-sm bg-yellow-400/10 px-2 py-1 rounded-full shadow-md mr-2">
-                      {wallet.priceRange}
-                    </span>
-                    {wallet.isHot && (
-                      <span className="text-orange-500 font-semibold text-sm bg-orange-500/10 px-2 py-1 rounded-full shadow-md animate-pulse">
-                        🔥 Hot
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <h1 className="text-2xl font-bold titanium-gradient">{wallet.name}</h1>
               </div>
+              <div className="flex flex-col items-end">
+                <span className="text-yellow-400 font-semibold text-sm bg-yellow-400/10 px-2 py-1 rounded-full shadow-md mb-1">
+                  {wallet.priceRange}
+                </span>
+                {wallet.isHot ? (
+                  <span className="text-orange-500 font-semibold text-sm bg-orange-500/10 px-2 py-1 rounded-full shadow-md animate-pulse">
+                    🔥 Hot
+                  </span>
+                ) : (
+                  <span className="text-green-500 font-semibold text-sm bg-green-500/10 px-2 py-1 rounded-full shadow-md">
+                    🐸 Cool
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex items-center text-gray-300 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm">Created on {wallet.createdAt}</span>
             </div>
             
             <p className="text-gray-300 text-base mb-6 leading-relaxed">{wallet.description}</p>
             
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 bg-[#1A1A1A] p-4 rounded-lg shadow-inner">
-              <div className="mb-4 sm:mb-0">
-                <div className="mb-2">
-                  <span className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#A0D8EF] to-[#3AABEE] text-transparent bg-clip-text">
-                    ${wallet.priceUSD}
-                  </span>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 bg-[#1A1A1A] p-4 rounded-lg shadow-inner">
+              <div className="w-full sm:w-2/3">
+                <div className="mb-4">
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold titanium-gradient">${wallet.priceUSD}</span>
                   <span className="text-sm sm:text-base md:text-lg text-gray-300 ml-2">
                     ≈ {tonAmount} TON
                   </span>
                 </div>
-                <div className="mb-2">
-                  <span className="text-sm text-gray-300">Current bid:</span>
-                  <span className="text-base font-semibold text-green-500 ml-2">${wallet.auctionPriceUSD}</span>
+                <div className="mb-4">
+                  <span className="text-sm sm:text-base md:text-lg text-gray-300">Current bid:</span>
+                  <span className="text-lg sm:text-xl md:text-2xl font-semibold text-green-500 ml-2">${bidPrice ?? 'N/A'}</span>
+                  {bidPrice !== null && (
+                    <span className="text-sm sm:text-base md:text-lg text-green-500 ml-2">
+                      (Save ${(wallet.priceUSD - bidPrice).toFixed(2)})
+                    </span>
+                  )}
                 </div>
-                <div>
-                  <span className="text-sm text-gray-300">Buy now:</span>
-                  <span className="text-base font-semibold text-yellow-500 ml-2">${buyNowPrice}</span>
+                <div className="mb-4">
+                  <span className="text-sm sm:text-base md:text-lg text-gray-300">Buy now:</span>
+                  <span className="text-lg sm:text-xl md:text-2xl font-semibold text-yellow-500 ml-2">${blitzPrice ?? 'N/A'}</span>
+                  {blitzPrice !== null && (
+                    <span className="text-sm sm:text-base md:text-lg text-red-500 ml-2">
+                      (Premium ${(blitzPrice - wallet.priceUSD).toFixed(2)})
+                    </span>
+                  )}
                 </div>
               </div>
-              <div className="flex flex-col items-start sm:items-end">
-                <span className="text-gray-300 text-sm sm:text-base md:text-lg">
-                  {isAuctionEnded ? 'Auction ended' : 'Auction ends in:'}
-                </span>
-                <span className="font-semibold text-base sm:text-lg md:text-xl text-[#FFA500]">
-                  {timeLeft}
-                </span>
+              <div className="w-full sm:w-1/3 flex flex-col items-start sm:items-end mt-4 sm:mt-0">
+                <div className="flex flex-col items-center sm:items-end w-full">
+                  <button 
+                    className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B4513] text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl mb-3"
+                  >
+                    Place Bid: ${bidPrice ?? 'N/A'}
+                  </button>
+                  <button 
+                    className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    Buy Now: ${blitzPrice ?? 'N/A'}
+                  </button>
+                </div>
               </div>
+            </div>
+            <div className="text-center bg-[#1A1A1A] p-3 rounded-lg mb-6">
+              <span className="text-gray-300 text-sm sm:text-base md:text-lg font-semibold">
+                {isAuctionEnded ? 'Auction ended' : 'Auction ends in:'}
+              </span>
+              <span className="font-bold text-base sm:text-lg md:text-xl text-[#FFA500] ml-2">
+                {timeLeft}
+              </span>
             </div>
 
             {/* Tokens list */}
@@ -207,19 +255,6 @@ export default function WalletPage({ params }: WalletPageProps) {
                   </span>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex flex-col gap-3 mb-4">
-              <button 
-                className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Place Bid: ${wallet.auctionPriceUSD}
-              </button>
-              <button 
-                className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Buy Now: ${buyNowPrice}
-              </button>
             </div>
           </div>
 

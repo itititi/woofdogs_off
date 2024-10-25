@@ -8,7 +8,6 @@ export interface WalletOffer {
   priceUSD: number;
   auctionPriceUSD: number;
   isHot: boolean;
-  createdAt: string;
   description: string;
   available: string;
   tokens: {
@@ -35,7 +34,6 @@ const createInitialWalletOffer = (
   priceRange: string,
   priceUSD: number,
   isHot: boolean,
-  createdAt: string,
   description: string,
   available: string,
   tokenStartIndex: number
@@ -65,7 +63,6 @@ const createInitialWalletOffer = (
     priceUSD,
     auctionPriceUSD,
     isHot,
-    createdAt,
     description,
     available,
     tokens
@@ -80,7 +77,6 @@ const initialWalletOffers: WalletOffer[] = [
     "~23kk",
     2300,
     true,
-    "2024-07-03",
     "TON Wallet with various features and balance. Great for intermediate users.",
     "23/93",
     0
@@ -92,7 +88,6 @@ const initialWalletOffers: WalletOffer[] = [
     "~15kk",
     1500,
     true,
-    "2024-06-15",
     "CryptoBot wallet with Telegram integration. Perfect for beginners.",
     "45/100",
     10
@@ -104,7 +99,6 @@ const initialWalletOffers: WalletOffer[] = [
     "~18kk",
     1800,
     true,
-    "2024-07-10",
     "TON Space wallet with advanced features. Ideal for experienced traders.",
     "33/80",
     20
@@ -142,30 +136,16 @@ export const getWalletOfferById = (id: string): WalletOffer | undefined => {
 const createMoreOffers = (baseOffers: WalletOffer[]): WalletOffer[] => {
   const moreOffers: WalletOffer[] = [];
   const seed = hashString("WooDogs More Offers");
-  const now = new Date();
-  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
-  const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
 
   for (let i = 0; i < 14; i++) {
     const baseOffer = baseOffers[i % 3];
     const isNew = seedRandom(seed + i) < 0.3; // 30% шанс быть новым предложением
-
-    let createdAt: Date;
-    if (isNew) {
-      // Новые предложения созданы от 0 до 2 дней назад
-      createdAt = new Date(twoDaysAgo.getTime() + seedRandom(seed + i * 2) * 2 * 24 * 60 * 60 * 1000);
-    } else {
-      // Старые предложения созданы от 1 месяца до 1 месяца и 7 дней назад
-      const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-      createdAt = new Date(oneMonthAgo.getTime() - seedRandom(seed + i * 3) * sevenDaysInMs);
-    }
 
     const newOffer: WalletOffer = {
       ...baseOffer,
       id: `${baseOffer.id}-${i + 2}`,
       isHot: isNew, // Новые предложения помечаются как "горячие"
       available: `${Math.floor(seedRandom(seed + i * 2) * 50 + 10)}/${Math.floor(seedRandom(seed + i * 3) * 50 + 50)}`,
-      createdAt: createdAt.toISOString().split('T')[0],
       tokens: baseOffer.tokens.map(t => ({
         ...t,
         ...generateTokenData(t.token, hashString(t.token.symbol + i))
@@ -174,7 +154,6 @@ const createMoreOffers = (baseOffers: WalletOffer[]): WalletOffer[] => {
     moreOffers.push(newOffer);
   }
 
-  // Перемешиваем массив с использованием фиксированного сида
   return shuffleArray(moreOffers, seed);
 };
 

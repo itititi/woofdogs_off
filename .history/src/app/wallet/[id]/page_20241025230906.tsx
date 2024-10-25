@@ -34,11 +34,14 @@ export default function WalletPage({ params }: WalletPageProps) {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+  const [bidPrice, setBidPrice] = useState<number | null>(null);
+  const [blitzPrice, setBlitzPrice] = useState<number | null>(null);
 
   const additionalTokensCount = useMemo(() => {
     if (!wallet) return 5;
+    // Используем id кошелька для генерации псевдослучайного числа
     const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return 5 + (seed % 6);
+    return 5 + (seed % 6); // Генерируем число от 5 до 10
   }, [params.id, wallet]);
 
   const auctionEndTime = useMemo(() => {
@@ -47,9 +50,10 @@ export default function WalletPage({ params }: WalletPageProps) {
     if (storedEndTime) {
       return parseInt(storedEndTime, 10);
     }
+    // Если нет сохраненного времени, генерируем новое
     const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const random = Math.sin(seed) * 10000;
-    const hours = Math.floor(random % 48);
+    const hours = Math.floor(random % 48); // От 0 до 47 часов
     const endTime = Date.now() + hours * 3600000;
     localStorage.setItem(`auctionEndTime_${params.id}`, endTime.toString());
     return endTime;
@@ -65,6 +69,15 @@ export default function WalletPage({ params }: WalletPageProps) {
       }
       setWallet(walletData);
 
+      const storedBidPrice = localStorage.getItem(`bidPrice_${params.id}`);
+      if (storedBidPrice) {
+        setBidPrice(parseFloat(storedBidPrice));
+      } else {
+        const newBidPrice = Math.round(walletData.priceUSD * (1.05 + Math.random() * 0.1)); // 105-115% от priceUSD
+        setBidPrice(newBidPrice);
+        localStorage.setItem(`bidPrice_${params.id}`, newBidPrice.toString());
+      }
+
       try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
@@ -73,6 +86,10 @@ export default function WalletPage({ params }: WalletPageProps) {
       } catch (error) {
         console.error('Error fetching TON price:', error);
       }
+
+      // Генерация цен
+      const basePrice = walletData.priceUSD;
+      setBlitzPrice(Math.round(basePrice * 1.2)); // Блиц-цена еще выше
 
       setIsLoading(false);
     };
@@ -116,7 +133,6 @@ export default function WalletPage({ params }: WalletPageProps) {
   }
 
   const walletContents = getWalletContents(wallet.name);
-  const buyNowPrice = Math.round((wallet.priceUSD + wallet.auctionPriceUSD) / 2);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -154,25 +170,30 @@ export default function WalletPage({ params }: WalletPageProps) {
               </div>
             </div>
             
+            <div className="flex items-center text-gray-300 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm">Created on {wallet.createdAt}</span>
+            </div>
+            
             <p className="text-gray-300 text-base mb-6 leading-relaxed">{wallet.description}</p>
             
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 bg-[#1A1A1A] p-4 rounded-lg shadow-inner">
               <div className="mb-4 sm:mb-0">
                 <div className="mb-2">
-                  <span className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#A0D8EF] to-[#3AABEE] text-transparent bg-clip-text">
-                    ${wallet.priceUSD}
-                  </span>
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold titanium-gradient">${wallet.priceUSD}</span>
                   <span className="text-sm sm:text-base md:text-lg text-gray-300 ml-2">
                     ≈ {tonAmount} TON
                   </span>
                 </div>
                 <div className="mb-2">
                   <span className="text-sm text-gray-300">Current bid:</span>
-                  <span className="text-base font-semibold text-green-500 ml-2">${wallet.auctionPriceUSD}</span>
+                  <span className="text-base font-semibold text-green-500 ml-2">${bidPrice ?? 'N/A'}</span>
                 </div>
                 <div>
                   <span className="text-sm text-gray-300">Buy now:</span>
-                  <span className="text-base font-semibold text-yellow-500 ml-2">${buyNowPrice}</span>
+                  <span className="text-base font-semibold text-yellow-500 ml-2">${blitzPrice ?? 'N/A'}</span>
                 </div>
               </div>
               <div className="flex flex-col items-start sm:items-end">
@@ -211,14 +232,14 @@ export default function WalletPage({ params }: WalletPageProps) {
             
             <div className="flex flex-col gap-3 mb-4">
               <button 
-                className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B4513] text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Place Bid: ${wallet.auctionPriceUSD}
+                Place Bid: ${bidPrice ?? 'N/A'}
               </button>
               <button 
                 className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Buy Now: ${buyNowPrice}
+                Buy Now: ${blitzPrice ?? 'N/A'}
               </button>
             </div>
           </div>
