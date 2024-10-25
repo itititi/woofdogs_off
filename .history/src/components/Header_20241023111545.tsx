@@ -112,7 +112,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <header className="bg-black bg-opacity-70 backdrop-filter backdrop-blur-md text-white fixed top-0 left-0 right-0 z-50">
+      <header className="bg-black text-white fixed top-0 left-0 right-0 z-50">
         <div className="max-w-[2056px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="flex items-center justify-between h-16 md:h-18 xl:h-20">
             <Link href="/" className="flex items-center">
@@ -163,7 +163,7 @@ const Header: React.FC = () => {
         </div>
       </header>
       {isMenuOpen && isMobileOrTablet && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 backdrop-filter backdrop-blur-md z-40 pt-16 md:pt-18">
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-40 pt-16 md:pt-18">
           <div className="max-w-md mx-auto px-4 py-6">
             <nav className="flex flex-col space-y-4">
               {navItems.map((item, index) => (
@@ -198,7 +198,7 @@ const Header: React.FC = () => {
       )}
       {isMobileOrTablet && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-black bg-opacity-80 backdrop-filter backdrop-blur-md rounded-full p-2 shadow-lg relative">
+          <div className="bg-black bg-opacity-80 rounded-full p-2 shadow-lg relative">
             {isConnected ? renderConnectedWallet() : renderConnectWallet()}
             {isConnected && isDropdownOpen && renderDropdown()}
           </div>

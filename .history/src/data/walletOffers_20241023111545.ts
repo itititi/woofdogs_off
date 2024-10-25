@@ -6,7 +6,6 @@ export interface WalletOffer {
   icon: string;
   priceRange: string;
   priceUSD: number;
-  auctionPriceUSD: number;
   isHot: boolean;
   createdAt: string;
   description: string;
@@ -28,7 +27,7 @@ const generateTokenData = (token: TonToken, seed: number): { address: string } =
   };
 };
 
-const createInitialWalletOffer = (
+const createWalletOffer = (
   id: string,
   name: string,
   icon: string,
@@ -40,8 +39,6 @@ const createInitialWalletOffer = (
   available: string,
   tokenStartIndex: number
 ): WalletOffer => {
-  const auctionPriceUSD = Math.round(priceUSD * (0.8 + Math.random() * 0.15));
-
   const tokens = tonTokens
     .filter(token => token.symbol !== 'BOLT')
     .slice(0, 5)
@@ -63,7 +60,6 @@ const createInitialWalletOffer = (
     icon,
     priceRange,
     priceUSD,
-    auctionPriceUSD,
     isHot,
     createdAt,
     description,
@@ -72,8 +68,8 @@ const createInitialWalletOffer = (
   };
 };
 
-const initialWalletOffers: WalletOffer[] = [
-  createInitialWalletOffer(
+export const walletOffers: WalletOffer[] = [
+  createWalletOffer(
     "ton-wallet-1",
     "TON Wallet",
     "/tonwallet.jpg",
@@ -85,7 +81,7 @@ const initialWalletOffers: WalletOffer[] = [
     "23/93",
     0
   ),
-  createInitialWalletOffer(
+  createWalletOffer(
     "cryptobot-1",
     "CryptoBot",
     "/cryptobot.jpg",
@@ -97,7 +93,7 @@ const initialWalletOffers: WalletOffer[] = [
     "45/100",
     10
   ),
-  createInitialWalletOffer(
+  createWalletOffer(
     "ton-space-1",
     "TON Space",
     "/tonspace.jpg",
@@ -111,34 +107,34 @@ const initialWalletOffers: WalletOffer[] = [
   ),
 ];
 
-export const getWalletOffers = (): WalletOffer[] => {
-  if (typeof window !== 'undefined') {
-    const storedOffers = localStorage.getItem('walletOffers');
-    if (storedOffers) {
-      return JSON.parse(storedOffers);
-    }
-    localStorage.setItem('walletOffers', JSON.stringify(initialWalletOffers));
+// Функция для содания псевдослучайного числ на основе строки
+const hashString = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Преобразование в 32-битное целое число
   }
-  return initialWalletOffers;
+  return hash;
 };
 
-export const updateWalletOffer = (updatedOffer: WalletOffer) => {
-  if (typeof window !== 'undefined') {
-    const offers = getWalletOffers();
-    const index = offers.findIndex(offer => offer.id === updatedOffer.id);
-    if (index !== -1) {
-      offers[index] = updatedOffer;
-      localStorage.setItem('walletOffers', JSON.stringify(offers));
-    }
+// Функция для перемешивания массива с использованием фиксированного сида
+const shuffleArray = <T>(array: T[], seed: number): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(seedRandom(seed + i) * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
+  return shuffled;
 };
 
-export const getWalletOfferById = (id: string): WalletOffer | undefined => {
-  const offers = getWalletOffers();
-  return offers.find(offer => offer.id === id);
+// Простой генератор псевдослучайных чисел на основе сида
+const seedRandom = (seed: number) => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
 };
 
-// Функция для создания дополнительных предложений
+// Создаем дополнительные предложения для раздела "More TON Wallets"
 const createMoreOffers = (baseOffers: WalletOffer[]): WalletOffer[] => {
   const moreOffers: WalletOffer[] = [];
   const seed = hashString("WooDogs More Offers");
@@ -178,46 +174,10 @@ const createMoreOffers = (baseOffers: WalletOffer[]): WalletOffer[] => {
   return shuffleArray(moreOffers, seed);
 };
 
-export const getMoreWalletOffers = (): WalletOffer[] => {
-  if (typeof window !== 'undefined') {
-    const storedMoreOffers = localStorage.getItem('moreWalletOffers');
-    if (storedMoreOffers) {
-      return JSON.parse(storedMoreOffers);
-    }
-    const moreOffers = createMoreOffers(getWalletOffers());
-    localStorage.setItem('moreWalletOffers', JSON.stringify(moreOffers));
-    return moreOffers;
-  }
-  return createMoreOffers(initialWalletOffers);
-};
+export const moreWalletOffers = createMoreOffers(walletOffers);
 
-export const getAllWalletOffers = (): WalletOffer[] => {
-  return [...getWalletOffers(), ...getMoreWalletOffers()];
-};
+export const finalWalletOffers = [...walletOffers, ...moreWalletOffers];
 
-// Функция для содания псевдослучайного числ на основе строки
-const hashString = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Преобразование в 32-битное целое число
-  }
-  return hash;
-};
-
-// Функция для перемешивания массива с использованием фиксированного сида
-const shuffleArray = <T>(array: T[], seed: number): T[] => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(seedRandom(seed + i) * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
-
-// Простой генератор псевдослучайных чисел на основе сида
-const seedRandom = (seed: number) => {
-  const x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
+export const getWalletOfferById = (id: string): WalletOffer | undefined => {
+  return finalWalletOffers.find(offer => offer.id === id);
 };

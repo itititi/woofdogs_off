@@ -76,10 +76,7 @@ const config: Config = {
   		}
   	}
   },
-  plugins: [
-    // @ts-expect-error Импорт плагина может вызвать ошибку типизации
-    import("tailwindcss-animate")
-  ],
+  plugins: [require("tailwindcss-animate")],
 } as const;
 
 export default config;

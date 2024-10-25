@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import { getWalletData } from '@/data/getWalletData';
-import { WalletOffer } from '@/data/walletOffers';
 
 const steps = ['Initializing', 'Processing', 'Confirming', 'Completing'];
 
@@ -13,7 +12,7 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const router = useRouter();
-  const [wallet, setWallet] = useState<WalletOffer | null>(null);
+  const [wallet, setWallet] = useState<any>(null);
 
   useEffect(() => {
     const fetchWalletData = async () => {

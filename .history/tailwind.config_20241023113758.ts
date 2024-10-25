@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animatePlugin from "tailwindcss-animate";
 
 const config: Config = {
     darkMode: ["class"],
@@ -76,10 +77,7 @@ const config: Config = {
   		}
   	}
   },
-  plugins: [
-    // @ts-expect-error Импорт плагина может вызвать ошибку типизации
-    import("tailwindcss-animate")
-  ],
+  plugins: [animatePlugin],
 } as const;
 
 export default config;

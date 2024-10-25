@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import WalletSkeleton from '@/components/WalletSkeleton';
 import { WalletOffer } from '@/data/walletOffers';
+import Link from 'next/link';
 
 interface WalletPageProps {
   params: {
@@ -34,8 +35,6 @@ export default function WalletPage({ params }: WalletPageProps) {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
-  const [bidPrice, setBidPrice] = useState<number | null>(null);
-  const [blitzPrice, setBlitzPrice] = useState<number | null>(null);
 
   const additionalTokensCount = useMemo(() => {
     if (!wallet) return 5;
@@ -69,15 +68,6 @@ export default function WalletPage({ params }: WalletPageProps) {
       }
       setWallet(walletData);
 
-      const storedBidPrice = localStorage.getItem(`bidPrice_${params.id}`);
-      if (storedBidPrice) {
-        setBidPrice(parseFloat(storedBidPrice));
-      } else {
-        const newBidPrice = Math.round(walletData.priceUSD * (1.05 + Math.random() * 0.1)); // 105-115% от priceUSD
-        setBidPrice(newBidPrice);
-        localStorage.setItem(`bidPrice_${params.id}`, newBidPrice.toString());
-      }
-
       try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
@@ -86,10 +76,6 @@ export default function WalletPage({ params }: WalletPageProps) {
       } catch (error) {
         console.error('Error fetching TON price:', error);
       }
-
-      // Генерация цен
-      const basePrice = walletData.priceUSD;
-      setBlitzPrice(Math.round(basePrice * 1.2)); // Блиц-цена еще выше
 
       setIsLoading(false);
     };
@@ -137,36 +123,34 @@ export default function WalletPage({ params }: WalletPageProps) {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-4 px-4 mt-16 overflow-y-auto">
+      <main className="flex-grow py-4 px-4 mt-16 sm:mt-20 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-y-auto">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-[#141414] rounded-2xl overflow-hidden shadow-2xl p-4 mb-4 border border-[#2A2A2E] relative">
-            <div className="flex justify-end mb-2">
-              <button 
-                onClick={handleClose}
-                className="text-gray-400 hover:text-white transition-colors duration-200"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <div className="w-16 h-16 rounded-[22%] overflow-hidden mr-4 shadow-lg">
-                  <Image src={wallet.icon} alt={wallet.name} width={64} height={64} className="object-cover" />
+          <div className="bg-[#141414] rounded-lg overflow-hidden shadow-2xl p-4 sm:p-6 mb-6 border border-[#2A2A2E] relative">
+            <button 
+              onClick={handleClose}
+              className="absolute top-2 right-2 text-gray-400 hover:text-white transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+              <div className="flex items-center mb-4 sm:mb-0">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[22%] overflow-hidden mr-4 shadow-lg">
+                  <Image src={wallet.icon} alt={wallet.name} width={80} height={80} className="object-cover" />
                 </div>
-                <h1 className="text-2xl font-bold titanium-gradient">{wallet.name}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold titanium-gradient">{wallet.name}</h1>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-yellow-400 font-semibold text-sm bg-yellow-400/10 px-2 py-1 rounded-full shadow-md mb-1">
+              <div className="flex items-center space-x-2 sm:space-x-4">
+                <span className="text-yellow-400 font-semibold text-sm sm:text-base bg-yellow-400/10 px-2 py-1 rounded-full shadow-md">
                   {wallet.priceRange}
                 </span>
                 {wallet.isHot ? (
-                  <span className="text-orange-500 font-semibold text-sm bg-orange-500/10 px-2 py-1 rounded-full shadow-md animate-pulse">
+                  <span className="text-orange-500 font-semibold text-sm sm:text-base bg-orange-500/10 px-2 py-1 rounded-full shadow-md animate-pulse">
                     🔥 Hot
                   </span>
                 ) : (
-                  <span className="text-green-500 font-semibold text-sm bg-green-500/10 px-2 py-1 rounded-full shadow-md">
+                  <span className="text-green-500 font-semibold text-sm sm:text-base bg-green-500/10 px-2 py-1 rounded-full shadow-md">
                     🐸 Cool
                   </span>
                 )}
@@ -184,26 +168,10 @@ export default function WalletPage({ params }: WalletPageProps) {
             
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 bg-[#1A1A1A] p-4 rounded-lg shadow-inner">
               <div className="mb-2 sm:mb-0">
-                <div className="mb-2">
-                  <span className="text-2xl sm:text-3xl font-bold titanium-gradient">${wallet.priceUSD}</span>
-                  <span className="text-sm sm:text-base text-gray-300 ml-2">
-                    ≈ {tonAmount} TON
-                  </span>
-                </div>
-                <div className="mb-2">
-                  <span className="text-sm sm:text-base text-gray-300">Current Bid:</span>
-                  <span className="text-lg sm:text-xl font-semibold text-green-500 ml-2">${bidPrice}</span>
-                  <span className="text-sm sm:text-base text-green-500 ml-2">
-                    (Save ${wallet.priceUSD - bidPrice!})
-                  </span>
-                </div>
-                <div>
-                  <span className="text-sm sm:text-base text-gray-300">Buy Now:</span>
-                  <span className="text-lg sm:text-xl font-semibold text-yellow-500 ml-2">${blitzPrice}</span>
-                  <span className="text-sm sm:text-base text-red-500 ml-2">
-                    (Premium ${blitzPrice! - wallet.priceUSD})
-                  </span>
-                </div>
+                <span className="text-2xl sm:text-3xl font-bold titanium-gradient">${wallet.priceUSD}</span>
+                <span className="text-sm sm:text-base text-gray-300 ml-2">
+                  ≈ {tonAmount} TON
+                </span>
               </div>
               <div className="flex flex-col items-start sm:items-end">
                 <span className="text-gray-300 text-sm sm:text-base">
@@ -239,17 +207,17 @@ export default function WalletPage({ params }: WalletPageProps) {
               </div>
             </div>
             
-            <div className="flex flex-col gap-3 mb-4">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <Link href={`/payment/${wallet.id}`} passHref>
+                <button className="flex-1 bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+                  Buy Now for ${wallet.priceUSD}
+                </button>
+              </Link>
               <button 
-                className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B4513] text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className={`flex-1 bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B4513] text-lg sm:text-xl font-bold py-3 sm:py-4 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl ${isAuctionEnded ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isAuctionEnded}
               >
-                Place Bid: ${bidPrice ?? wallet.priceUSD} 
-                {bidPrice && `(Save $${(wallet.priceUSD - bidPrice).toFixed(2)})`}
-              </button>
-              <button 
-                className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-lg font-bold py-3 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Buy Now: ${blitzPrice ?? wallet.priceUSD}
+                Place Bid
               </button>
             </div>
           </div>
