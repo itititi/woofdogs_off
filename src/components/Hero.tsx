@@ -55,7 +55,7 @@ const AnimatedTitle: React.FC = () => {
 
 const Hero: React.FC = () => {
   return (
-    <div className="bg-black pt-20 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 2xl:pb-32 px-4 sm:px-6 lg:px-8">
+    <div className="bg-black pt-20 pb-4 sm:pb-6 md:pb-8 lg:pb-10 xl:pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto w-full">
         <div className="text-center">
           <div className="mb-4 sm:mb-6 lg:mb-8">
