@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+}
+
+html, body {
+  background-color: black;
+  color: rgb(var(--foreground-rgb));
+  min-height: 100vh;
+}
+
+/* Typography Scale */
+@layer base {
+  /* Mobile First (iPhone 15) */
+  h1 {
+    @apply text-3xl font-bold;
+    /* 30px */
+  }
+
+  h2 {
+    @apply text-2xl font-bold;
+    /* 24px */
+  }
+
+  h3 {
+    @apply text-xl font-bold;
+    /* 20px */
+  }
+
+  p, span, div {
+    @apply text-base;
+    /* 16px */
+  }
+
+  /* Small text */
+  .text-xs {
+    @apply text-sm;
+    /* 14px вместо 12px */
+  }
+
+  /* iPhone 15 specific */
+  @media screen and (max-width: 390px) {
+    h1 {
+      @apply text-[56px] leading-tight;
+    }
+
+    h2 {
+      @apply text-[28px] leading-tight;
+    }
+
+    h3 {
+      @apply text-[24px] leading-tight;
+    }
+
+    p, span, div {
+      @apply text-[18px] leading-normal;
+    }
+
+    .text-xs {
+      @apply text-[14px];
+    }
+
+    .text-sm {
+      @apply text-[16px];
+    }
+
+    .text-lg {
+      @apply text-[20px];
+    }
+
+    .text-xl {
+      @apply text-[24px];
+    }
+
+    .text-2xl {
+      @apply text-[28px];
+    }
+
+    .text-3xl {
+      @apply text-[32px];
+    }
+  }
+
+  /* Tablet (md) */
+  @screen md {
+    h1 {
+      @apply text-4xl;
+      /* 36px */
+    }
+
+    h2 {
+      @apply text-3xl;
+      /* 30px */
+    }
+
+    h3 {
+      @apply text-2xl;
+      /* 24px */
+    }
+
+    p, span, div {
+      @apply text-lg;
+      /* 18px */
+    }
+  }
+
+  /* Desktop (lg) */
+  @screen lg {
+    h1 {
+      @apply text-5xl;
+      /* 48px */
+    }
+
+    h2 {
+      @apply text-4xl;
+      /* 36px */
+    }
+
+    h3 {
+      @apply text-3xl;
+      /* 30px */
+    }
+
+    p, span, div {
+      @apply text-lg;
+      /* 18px */
+    }
+  }
+}
+
+/* Common Components */
+@layer components {
+  .container-padding {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+
+  .section-spacing {
+    @apply py-4 md:py-6 lg:py-8;
+  }
+
+  .card {
+    @apply bg-[#141414] rounded-2xl border border-[#2A2A2E] overflow-hidden shadow-md;
+  }
+
+  .card-padding {
+    @apply p-4 md:p-5 lg:p-6;
+  }
+
+  .button-primary {
+    @apply bg-[#3AABEE] hover:bg-[#2995E0] text-white font-bold py-2 px-4 rounded-full transition-all duration-300;
+  }
+
+  .button-secondary {
+    @apply bg-[#2A2A2E] hover:bg-[#3A3A3E] text-white font-bold py-2 px-4 rounded-full transition-all duration-300;
+  }
+}
+
+/* Consistent spacing */
+.content-wrapper {
+  @apply max-w-7xl mx-auto w-full;
+}
+
+/* Consistent animations */
+.transition-standard {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Consistent borders */
+.border-standard {
+  @apply border border-[#2A2A2E];
+}
+
+/* Consistent gradients */
+.titanium-gradient {
+  @apply bg-gradient-to-r from-[#E8E8E8] to-[#A9A9A9] bg-clip-text text-transparent;
+}
+
+/* Consistent shadows */
+.shadow-standard {
+  @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
+}
+
+/* Device-specific optimizations */
+@media screen and (max-width: 390px) {
+  /* iPhone 15 specific */
+  .container-padding {
+    @apply px-3;
+  }
+
+  .card-padding {
+    @apply p-3;
+  }
+
+  .button-primary, .button-secondary {
+    @apply py-1.5 px-3 text-sm;
+  }
+}
+
+/* Existing animations and other styles... */
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(49,166,245,0.5);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(49,166,245,0.8), 0 0 40px rgba(49,166,245,0.3);
+  }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Keep existing theme variables */
+@layer base {
+  :root {
+    /* Keep your existing theme variables... */
+  }
+}
