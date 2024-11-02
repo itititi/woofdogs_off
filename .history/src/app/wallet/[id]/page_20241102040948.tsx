@@ -82,7 +82,7 @@ export default function WalletPage({ params }: WalletPageProps) {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-4 px-4 mt-[72px] sm:mt-20 lg:mt-24 overflow-y-auto">
+      <main className="flex-grow py-4 px-4 mt-14 sm:mt-20 lg:mt-24 overflow-y-auto">
         <div className="max-w-3xl mx-auto">
           <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 mb-4 border border-[#2A2A2E] relative">
             {/* Header section */}

@@ -11,18 +11,7 @@ interface WalletCardProps {
 }
 
 const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1440);
-    };
-
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
+  const isLargeScreen = window.innerWidth >= 1440;
 
   const getWalletStatus = (id: string) => {
     const statusMap: { [key: string]: { emoji: string; text: string; color: string } | null } = {
@@ -42,13 +31,13 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
       <Link href={`/wallet/${offer.id}`}>
         <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 border border-[#2A2A2E] hover:border-[#2A2A2E] hover:shadow-[0_0_20px_rgba(42,42,46,0.7)] hover:bg-[#1A1A1A] transition-all duration-300 flex items-center">
           <div className="flex items-center flex-1">
-            <div className="w-14 h-14 sm:w-12 sm:h-12 rounded-[22%] overflow-hidden mr-3 sm:mr-4 shadow-lg">
+            <div className="w-12 h-12 rounded-[22%] overflow-hidden mr-4 shadow-lg">
               <Image 
                 src={offer.icon} 
                 alt={offer.name} 
-                width={56} 
-                height={56} 
-                className="object-cover w-full h-full" 
+                width={48} 
+                height={48} 
+                className="object-cover" 
               />
             </div>
             <div className="flex-1">
@@ -59,16 +48,16 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
 
           <div className="flex items-center gap-6 ml-6">
             <div className="flex items-center gap-2">
-              <span className="text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-3 py-1 rounded-xl">
+              <span className="text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-3 py-1 rounded-full">
                 {offer.priceRange}
               </span>
               {offer.isHot && (
-                <span className="text-[14px] text-orange-500 font-medium bg-orange-500/10 px-3 py-1 rounded-xl animate-pulse">
+                <span className="text-[14px] text-orange-500 font-medium bg-orange-500/10 px-3 py-1 rounded-full animate-pulse">
                   🔥 Hot
                 </span>
               )}
               {walletStatus && (
-                <span className={`text-[14px] font-medium px-3 py-1 rounded-xl ${walletStatus.color}`}>
+                <span className={`text-[14px] font-medium px-3 py-1 rounded-full ${walletStatus.color}`}>
                   {walletStatus.emoji} {walletStatus.text}
                 </span>
               )}
@@ -93,7 +82,7 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
                 </div>
               </div>
 
-              <button className="relative group h-10 px-6 rounded-xl overflow-hidden flex items-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300">
+              <button className="relative group h-10 px-6 rounded-lg overflow-hidden flex items-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
                 <span className="text-[14px] font-semibold text-white z-10">View Details</span>
               </button>
@@ -106,33 +95,31 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
 
   return (
     <Link href={`/wallet/${offer.id}`}>
-      <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 border border-[#2A2A2E] hover:border-[#2A2A2E] hover:shadow-[0_0_20px_rgba(42,42,46,0.7)] hover:bg-[#1A1A1A] transition-all duration-300 h-[260px] sm:h-[260px] flex flex-col">
+      <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 border border-[#2A2A2E] hover:border-[#2A2A2E] hover:shadow-[0_0_20px_rgba(42,42,46,0.7)] hover:bg-[#1A1A1A] transition-all duration-300 h-[240px] sm:h-[260px] flex flex-col">
         {/* Header section */}
-        <div className="flex items-center mb-3">
-          <div className="w-14 h-14 sm:w-14 sm:h-14 rounded-[22%] overflow-hidden mr-3 shadow-lg">
+        <div className="flex items-center mb-3 sm:mb-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[22%] overflow-hidden mr-3 shadow-lg">
             <Image 
               src={offer.icon} 
               alt={offer.name} 
               width={56} 
               height={56} 
-              className="object-cover w-full h-full" 
+              className="object-cover sm:scale-100 scale-75" 
             />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-[20px] sm:text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-2 truncate">
-              {offer.name}
-            </h1>
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-              <span className="text-[14px] sm:text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full flex-shrink-0">
+            <h1 className="text-[20px] sm:text-[24px] font-bold titanium-gradient mb-2 truncate">{offer.name}</h1>
+            <div className="flex items-center gap-2">
+              <span className="text-[14px] sm:text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full">
                 {offer.priceRange}
               </span>
               {offer.isHot && (
-                <span className="text-[14px] sm:text-[14px] text-orange-500 font-medium bg-orange-500/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full animate-pulse flex-shrink-0">
+                <span className="text-[14px] sm:text-[14px] text-orange-500 font-medium bg-orange-500/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full animate-pulse">
                   🔥 Hot
                 </span>
               )}
               {walletStatus && (
-                <span className={`text-[14px] sm:text-[14px] font-medium px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${walletStatus.color} flex-shrink-0`}>
+                <span className={`text-[14px] sm:text-[14px] font-medium px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${walletStatus.color}`}>
                   {walletStatus.emoji} {walletStatus.text}
                 </span>
               )}
@@ -141,27 +128,25 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
         </div>
 
         {/* Description */}
-        <p className="text-[14px] text-gray-300 mb-4 line-clamp-1 overflow-hidden text-ellipsis">
-          {offer.description}
-        </p>
+        <p className="text-[14px] sm:text-[14px] text-gray-300 mb-6 line-clamp-2 leading-relaxed">{offer.description}</p>
 
         {/* Price section */}
-        <div className="bg-[#1A1A1A] rounded-xl p-4 mt-auto">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-baseline justify-between">
-              <span className="text-[24px] sm:text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
+        <div className="bg-[#1A1A1A] rounded-2xl p-3 sm:p-4 mt-auto">
+          <div className="flex flex-col sm:flex-col gap-2">
+            <div className="flex items-baseline">
+              <span className="text-[18px] sm:text-[20px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
                 ${offer.priceUSD}
               </span>
-              <span className="text-[14px] text-gray-400">Balance</span>
+              <span className="text-[14px] text-gray-400 ml-1.5 sm:ml-2">Balance</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <span className="text-[14px] text-gray-400">Bid:</span>
-                <span className="text-[16px] font-semibold text-green-500 ml-1.5 sm:ml-2">${offer.auctionPriceUSD}</span>
+                <span className="text-[14px] font-semibold text-green-500 ml-1.5 sm:ml-2">${offer.auctionPriceUSD}</span>
               </div>
               <div className="flex items-center">
                 <span className="text-[14px] text-gray-400">Buy:</span>
-                <span className="text-[16px] font-semibold text-yellow-500 ml-1.5 sm:ml-2">
+                <span className="text-[14px] font-semibold text-yellow-500 ml-1.5 sm:ml-2">
                   ${Math.round((offer.priceUSD + offer.auctionPriceUSD) / 2)}
                 </span>
               </div>
@@ -174,53 +159,35 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
 };
 
 const WalletCardSkeleton: React.FC = () => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1440);
-    };
-
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
+  const isLargeScreen = window.innerWidth >= 1920;
 
   if (isLargeScreen) {
     return (
       <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 border border-[#2A2A2E] animate-pulse flex items-center">
         <div className="flex items-center flex-1">
-          <div className="w-12 h-12 bg-[#2A2A2E] rounded-[22%] mr-4"></div>
+          <div className="w-12 h-12 bg-gray-700 rounded-[22%] mr-4"></div>
           <div className="flex-1">
-            <div className="h-5 w-32 bg-[#2A2A2E] rounded-xl mb-2"></div>
-            <div className="h-4 w-2/3 bg-[#2A2A2E] rounded-xl"></div>
+            <div className="h-6 w-32 bg-gray-700 rounded mb-2"></div>
+            <div className="h-4 w-2/3 bg-gray-700 rounded"></div>
           </div>
         </div>
 
         <div className="flex items-center gap-6 ml-6">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-24 bg-[#2A2A2E] rounded-xl"></div>
-            <div className="h-6 w-20 bg-[#2A2A2E] rounded-xl"></div>
-            <div className="h-6 w-24 bg-[#2A2A2E] rounded-xl"></div>
+            <div className="h-6 w-24 bg-gray-700 rounded-full"></div>
+            <div className="h-6 w-20 bg-gray-700 rounded-full"></div>
           </div>
 
           <div className="flex items-center gap-8 min-w-[300px]">
             <div className="flex flex-col gap-2">
-              <div className="h-6 w-20 bg-[#2A2A2E] rounded-xl"></div>
+              <div className="h-6 w-24 bg-gray-700 rounded"></div>
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  <div className="h-4 w-8 bg-[#2A2A2E] rounded-xl"></div>
-                  <div className="h-4 w-12 bg-[#2A2A2E] rounded-xl"></div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="h-4 w-8 bg-[#2A2A2E] rounded-xl"></div>
-                  <div className="h-4 w-12 bg-[#2A2A2E] rounded-xl"></div>
-                </div>
+                <div className="h-4 w-16 bg-gray-700 rounded"></div>
+                <div className="h-4 w-16 bg-gray-700 rounded"></div>
               </div>
             </div>
 
-            <div className="h-10 w-[120px] bg-[#2A2A2E] rounded-xl"></div>
+            <div className="h-8 w-24 bg-gray-700 rounded-full"></div>
           </div>
         </div>
       </div>
@@ -230,36 +197,28 @@ const WalletCardSkeleton: React.FC = () => {
   return (
     <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 border border-[#2A2A2E] animate-pulse h-[240px] sm:h-[260px] flex flex-col">
       <div className="flex items-center mb-4">
-        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#2A2A2E] rounded-[22%] mr-3"></div>
+        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gray-700 rounded-[22%] mr-3"></div>
         <div className="flex-1">
-          <div className="h-6 w-32 bg-[#2A2A2E] rounded-xl mb-2"></div>
+          <div className="h-6 w-32 bg-gray-700 rounded mb-2"></div>
           <div className="flex gap-2">
-            <div className="h-6 w-20 bg-[#2A2A2E] rounded-xl"></div>
-            <div className="h-6 w-16 bg-[#2A2A2E] rounded-xl"></div>
+            <div className="h-5 w-20 bg-gray-700 rounded-full"></div>
+            <div className="h-5 w-16 bg-gray-700 rounded-full"></div>
           </div>
         </div>
       </div>
       
-      <div className="h-4 bg-[#2A2A2E] rounded-xl w-full mb-2"></div>
-      <div className="h-4 bg-[#2A2A2E] rounded-xl w-5/6 mb-6"></div>
+      <div className="h-4 bg-gray-700 rounded w-full mb-2"></div>
+      <div className="h-4 bg-gray-700 rounded w-5/6"></div>
       
-      <div className="mt-auto bg-[#1A1A1A] rounded-xl p-4">
+      <div className="mt-auto bg-[#1A1A1A] rounded-2xl p-3">
         <div className="flex flex-col gap-2">
-          <div className="flex items-baseline justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-5 w-16 bg-[#2A2A2E] rounded-xl"></div>
-              <div className="h-4 w-14 bg-[#2A2A2E] rounded-xl"></div>
-            </div>
+          <div className="flex items-center justify-between">
+            <div className="h-5 w-24 bg-gray-700 rounded"></div>
+            <div className="h-4 w-16 bg-gray-700 rounded"></div>
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <div className="h-4 w-6 bg-[#2A2A2E] rounded-xl"></div>
-              <div className="h-4 w-12 bg-[#2A2A2E] rounded-xl"></div>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="h-4 w-6 bg-[#2A2A2E] rounded-xl"></div>
-              <div className="h-4 w-12 bg-[#2A2A2E] rounded-xl"></div>
-            </div>
+            <div className="h-4 w-20 bg-gray-700 rounded"></div>
+            <div className="h-4 w-20 bg-gray-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -315,30 +274,23 @@ const WalletShowcase: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-black flex-grow py-4 mt-14 sm:mt-16">
+      <div className="bg-black flex-grow pt-6 pb-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-          <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12">
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
-              Hot TON Wallets
-            </h2>
-            <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-4 mb-12 sm:mb-14 lg:mb-16">
-              {[...Array(4)].map((_, index) => (
-                <WalletCardSkeleton key={index} />
-              ))}
-            </div>
+          <div className="border-t border-[#2A2A2E] mb-6"></div>
+          <h2 className="text-2xl font-bold titanium-gradient mb-4 text-center">Hot TON Wallets</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+            {[...Array(4)].map((_, index) => (
+              <WalletCardSkeleton key={index} />
+            ))}
           </div>
           
-          <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-          <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12">
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
-              More TON Wallets
-            </h2>
-            <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-4">
-              {[...Array(8)].map((_, index) => (
-                <WalletCardSkeleton key={index} />
-              ))}
-            </div>
+          <div className="border-t border-[#2A2A2E] my-6"></div>
+          
+          <h2 className="text-2xl font-bold titanium-gradient mb-4 text-center">More TON Wallets</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, index) => (
+              <WalletCardSkeleton key={index} />
+            ))}
           </div>
         </div>
       </div>
@@ -370,16 +322,16 @@ const WalletShowcase: React.FC = () => {
   }
 
   return (
-    <div className="bg-black flex-grow py-4 mt-[72px] sm:mt-20 lg:mt-24">
+    <div className="bg-black flex-grow py-4 mt-14 sm:mt-16">
       <div className="max-w-7xl mx-auto">
         {hotOffers.length > 0 && (
           <>
-            <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-            <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12">
-              <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
+            <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm mb-8 sm:mb-10 lg:mb-12"></div>
+            <div className="px-6 sm:px-8 lg:px-10">
+              <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-8 sm:mb-10">
                 Hot TON Wallets
               </h2>
-              <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-4 mb-12 sm:mb-14 lg:mb-16">
+              <div className="grid grid-cols-1 gap-4 mb-12 sm:mb-14 lg:mb-16">
                 {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
               </div>
             </div>
@@ -388,12 +340,12 @@ const WalletShowcase: React.FC = () => {
         
         {regularOffers.length > 0 && (
           <>
-            <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-            <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12 pb-8">
-              <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
+            <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm mb-8 sm:mb-10 lg:mb-12"></div>
+            <div className="px-6 sm:px-8 lg:px-10">
+              <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-8 sm:mb-10">
                 More TON Wallets
               </h2>
-              <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-1 gap-4">
                 {regularOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
               </div>
             </div>

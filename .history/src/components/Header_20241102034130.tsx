@@ -121,11 +121,11 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="bg-black/80 backdrop-blur-md text-white fixed top-0 left-0 right-0 z-50 border-b border-[#2A2A2E]/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
           <div className="flex items-center justify-between h-[72px]">
             <Link href="/" className="flex items-center flex-shrink-0">
-              <Image src="/woodogslogo.svg" alt="WooDogs Logo" width={32} height={32} className="mr-2 invert" />
-              <span className="font-bold text-[20px] whitespace-nowrap">WooDogs</span>
+              <Image src="/woodogslogo.svg" alt="WooDogs Logo" width={36} height={36} className="mr-3 invert" />
+              <span className="font-bold text-[22px] whitespace-nowrap">WooDogs</span>
             </Link>
             
             {!isMobileOrTablet && (
@@ -170,7 +170,7 @@ const Header: React.FC = () => {
               </nav>
             )}
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4 flex-shrink-0">
               <div className="relative">
                 {renderWalletButton()}
                 {isConnected && isDropdownOpen && (
@@ -200,7 +200,7 @@ const Header: React.FC = () => {
               </div>
               {isMobileOrTablet && (
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white flex-shrink-0">
-                  {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                  {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
               )}
             </div>
@@ -211,8 +211,8 @@ const Header: React.FC = () => {
       {/* Mobile Menu */}
       {isMenuOpen && isMobileOrTablet && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-40 pt-20">
-          <div className="max-w-md mx-auto px-4 h-[calc(100vh-80px)] flex flex-col">
-            <nav className="flex flex-col space-y-6 flex-1">
+          <div className="max-w-md mx-auto px-4 py-6">
+            <nav className="flex flex-col space-y-6">
               {navItems.map((item, index) => (
                 item.isButton ? (
                   <Link 
@@ -250,14 +250,6 @@ const Header: React.FC = () => {
                 )
               ))}
             </nav>
-            <div className="pb-[calc(120px+env(safe-area-inset-bottom))]">
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 w-full"
-              >
-                <span className="text-[16px] font-semibold text-black z-10">Close</span>
-              </button>
-            </div>
           </div>
         </div>
       )}

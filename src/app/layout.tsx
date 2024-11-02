@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "WooDogs",
@@ -26,8 +27,9 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         {children}
+        <Footer />
       </body>
     </html>
   )

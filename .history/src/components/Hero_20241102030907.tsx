@@ -27,21 +27,14 @@ const SearchBar: React.FC = () => {
           ref={searchRef}
           type="text"
           placeholder="Search wallets"
-          className="w-full py-3.5 px-5 pr-[120px] rounded-xl bg-[#141414]/80 backdrop-blur-md text-white placeholder-gray-400 focus:outline-none text-[16px] h-12 leading-tight border border-[#2A2A2E]/50 transition-all duration-300 focus:border-[#3AABEE]/50 hover:bg-[#1A1A1A]/80"
-          style={{ 
-            WebkitTextSizeAdjust: 'none',
-            fontSize: '16px'
-          }}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
+          className="w-full py-3.5 px-5 pr-[120px] rounded-lg bg-[#141414]/80 backdrop-blur-md text-white placeholder-gray-400 focus:outline-none text-[14px] h-12 leading-tight border border-[#2A2A2E]/50 transition-all duration-300 focus:border-[#3AABEE]/50 hover:bg-[#1A1A1A]/80"
+          style={{ WebkitTextSizeAdjust: 'none' }}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-          <div className="hidden sm:flex items-center gap-3 translate-y-[1px]">
-            <span className="text-[12px] text-gray-400/70 bg-[#2A2A2E] px-2 py-0.5 rounded-xl">
+          <div className="hidden sm:flex items-center gap-3">
+            <span className="text-[12px] text-gray-400/70 bg-[#2A2A2E] px-2 py-0.5 rounded">
               cmd+K
             </span>
             <div className="w-px h-4 bg-[#2A2A2E]"></div>
@@ -78,10 +71,10 @@ const AnimatedTitle: React.FC = () => {
 
 const Hero: React.FC = () => {
   return (
-    <div className="bg-black pt-20 sm:pt-24 lg:pt-32 2xl:pt-40 pb-0 sm:pb-8 lg:pb-10 2xl:pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-black pt-20 sm:pt-24 pb-6 sm:pb-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto w-full">
         <div className="text-center">
-          <div className="mb-8 sm:mb-10 lg:mb-12">
+          <div className="mb-6">
             <Image 
               src="/flag.gif" 
               alt="Flag GIF" 
@@ -91,21 +84,19 @@ const Hero: React.FC = () => {
               priority
             />
           </div>
-          <div className="mb-6 sm:mb-8 lg:mb-10 leading-[1.1] whitespace-nowrap">
-            <span className="titanium-gradient inline text-[28px] sm:text-[32px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px] font-bold">
+          <div className="mb-5 leading-[1.1] whitespace-nowrap">
+            <span className="titanium-gradient inline text-[28px] sm:text-[32px] lg:text-[36px] font-bold">
               Buy and Sell
             </span>{' '}
-            <span className="text-white inline text-[28px] sm:text-[32px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px] font-bold">
+            <span className="text-white inline text-[28px] sm:text-[32px] lg:text-[36px] font-bold">
               <AnimatedTitle />
             </span>
           </div>
-          <p className="text-[14px] sm:text-[16px] lg:text-[18px] mb-8 sm:mb-10 lg:mb-12 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[14px] sm:text-[16px] mb-6 text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Secure your assets with blockchain wallets in an ecosystem of over 950 million users. 
             Manage your TON with unparalleled security and convenience.
           </p>
-          <div className="-mb-4 sm:mb-0">
-            <SearchBar />
-          </div>
+          <SearchBar />
         </div>
       </div>
     </div>

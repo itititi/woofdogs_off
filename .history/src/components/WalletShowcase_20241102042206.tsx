@@ -42,12 +42,12 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
       <Link href={`/wallet/${offer.id}`}>
         <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 border border-[#2A2A2E] hover:border-[#2A2A2E] hover:shadow-[0_0_20px_rgba(42,42,46,0.7)] hover:bg-[#1A1A1A] transition-all duration-300 flex items-center">
           <div className="flex items-center flex-1">
-            <div className="w-14 h-14 sm:w-12 sm:h-12 rounded-[22%] overflow-hidden mr-3 sm:mr-4 shadow-lg">
+            <div className="w-12 h-12 sm:w-12 sm:h-12 rounded-[22%] overflow-hidden mr-3 sm:mr-4 shadow-lg">
               <Image 
                 src={offer.icon} 
                 alt={offer.name} 
-                width={56} 
-                height={56} 
+                width={48} 
+                height={48} 
                 className="object-cover w-full h-full" 
               />
             </div>
@@ -106,10 +106,10 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
 
   return (
     <Link href={`/wallet/${offer.id}`}>
-      <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 border border-[#2A2A2E] hover:border-[#2A2A2E] hover:shadow-[0_0_20px_rgba(42,42,46,0.7)] hover:bg-[#1A1A1A] transition-all duration-300 h-[260px] sm:h-[260px] flex flex-col">
+      <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 border border-[#2A2A2E] hover:border-[#2A2A2E] hover:shadow-[0_0_20px_rgba(42,42,46,0.7)] hover:bg-[#1A1A1A] transition-all duration-300 h-[240px] sm:h-[260px] flex flex-col">
         {/* Header section */}
-        <div className="flex items-center mb-3">
-          <div className="w-14 h-14 sm:w-14 sm:h-14 rounded-[22%] overflow-hidden mr-3 shadow-lg">
+        <div className="flex items-center mb-3 sm:mb-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[22%] overflow-hidden mr-3 shadow-lg">
             <Image 
               src={offer.icon} 
               alt={offer.name} 
@@ -119,20 +119,18 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-[20px] sm:text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-2 truncate">
-              {offer.name}
-            </h1>
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-              <span className="text-[14px] sm:text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full flex-shrink-0">
+            <h1 className="text-[20px] sm:text-[24px] font-bold titanium-gradient mb-2 truncate">{offer.name}</h1>
+            <div className="flex items-center gap-2">
+              <span className="text-[14px] sm:text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full">
                 {offer.priceRange}
               </span>
               {offer.isHot && (
-                <span className="text-[14px] sm:text-[14px] text-orange-500 font-medium bg-orange-500/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full animate-pulse flex-shrink-0">
+                <span className="text-[14px] sm:text-[14px] text-orange-500 font-medium bg-orange-500/10 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full animate-pulse">
                   🔥 Hot
                 </span>
               )}
               {walletStatus && (
-                <span className={`text-[14px] sm:text-[14px] font-medium px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${walletStatus.color} flex-shrink-0`}>
+                <span className={`text-[14px] sm:text-[14px] font-medium px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${walletStatus.color}`}>
                   {walletStatus.emoji} {walletStatus.text}
                 </span>
               )}
@@ -141,27 +139,25 @@ const WalletCard: React.FC<WalletCardProps> = ({ offer }) => {
         </div>
 
         {/* Description */}
-        <p className="text-[14px] text-gray-300 mb-4 line-clamp-1 overflow-hidden text-ellipsis">
-          {offer.description}
-        </p>
+        <p className="text-[14px] sm:text-[14px] text-gray-300 mb-6 line-clamp-2 leading-relaxed">{offer.description}</p>
 
         {/* Price section */}
-        <div className="bg-[#1A1A1A] rounded-xl p-4 mt-auto">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-baseline justify-between">
-              <span className="text-[24px] sm:text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
+        <div className="bg-[#1A1A1A] rounded-2xl p-3 sm:p-4 mt-auto">
+          <div className="flex flex-col sm:flex-col gap-2">
+            <div className="flex items-baseline">
+              <span className="text-[18px] sm:text-[20px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
                 ${offer.priceUSD}
               </span>
-              <span className="text-[14px] text-gray-400">Balance</span>
+              <span className="text-[14px] text-gray-400 ml-1.5 sm:ml-2">Balance</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <span className="text-[14px] text-gray-400">Bid:</span>
-                <span className="text-[16px] font-semibold text-green-500 ml-1.5 sm:ml-2">${offer.auctionPriceUSD}</span>
+                <span className="text-[14px] font-semibold text-green-500 ml-1.5 sm:ml-2">${offer.auctionPriceUSD}</span>
               </div>
               <div className="flex items-center">
                 <span className="text-[14px] text-gray-400">Buy:</span>
-                <span className="text-[16px] font-semibold text-yellow-500 ml-1.5 sm:ml-2">
+                <span className="text-[14px] font-semibold text-yellow-500 ml-1.5 sm:ml-2">
                   ${Math.round((offer.priceUSD + offer.auctionPriceUSD) / 2)}
                 </span>
               </div>
@@ -370,7 +366,7 @@ const WalletShowcase: React.FC = () => {
   }
 
   return (
-    <div className="bg-black flex-grow py-4 mt-[72px] sm:mt-20 lg:mt-24">
+    <div className="bg-black flex-grow py-4 mt-14 sm:mt-16">
       <div className="max-w-7xl mx-auto">
         {hotOffers.length > 0 && (
           <>
@@ -389,7 +385,7 @@ const WalletShowcase: React.FC = () => {
         {regularOffers.length > 0 && (
           <>
             <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-            <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12 pb-8">
+            <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12">
               <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
                 More TON Wallets
               </h2>

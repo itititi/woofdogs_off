@@ -211,8 +211,8 @@ const Header: React.FC = () => {
       {/* Mobile Menu */}
       {isMenuOpen && isMobileOrTablet && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-40 pt-20">
-          <div className="max-w-md mx-auto px-4 h-[calc(100vh-80px)] flex flex-col">
-            <nav className="flex flex-col space-y-6 flex-1">
+          <div className="max-w-md mx-auto px-4 py-6">
+            <nav className="flex flex-col space-y-6">
               {navItems.map((item, index) => (
                 item.isButton ? (
                   <Link 
@@ -250,14 +250,6 @@ const Header: React.FC = () => {
                 )
               ))}
             </nav>
-            <div className="pb-[calc(120px+env(safe-area-inset-bottom))]">
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 w-full"
-              >
-                <span className="text-[16px] font-semibold text-black z-10">Close</span>
-              </button>
-            </div>
           </div>
         </div>
       )}

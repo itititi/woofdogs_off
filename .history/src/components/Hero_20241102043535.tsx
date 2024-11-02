@@ -40,7 +40,7 @@ const SearchBar: React.FC = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-          <div className="hidden sm:flex items-center gap-3 translate-y-[1px]">
+          <div className="hidden sm:flex items-center gap-3">
             <span className="text-[12px] text-gray-400/70 bg-[#2A2A2E] px-2 py-0.5 rounded-xl">
               cmd+K
             </span>
@@ -78,7 +78,7 @@ const AnimatedTitle: React.FC = () => {
 
 const Hero: React.FC = () => {
   return (
-    <div className="bg-black pt-20 sm:pt-24 lg:pt-32 2xl:pt-40 pb-0 sm:pb-8 lg:pb-10 2xl:pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-black pt-20 sm:pt-24 lg:pt-32 2xl:pt-40 pb-0 sm:pb-16 lg:pb-20 2xl:pb-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto w-full">
         <div className="text-center">
           <div className="mb-8 sm:mb-10 lg:mb-12">

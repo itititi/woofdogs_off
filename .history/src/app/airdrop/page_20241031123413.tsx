@@ -96,33 +96,23 @@ const AirdropPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-4 px-4 mt-14 sm:mt-20 lg:mt-24">
+      <main className="flex-grow py-4 px-4 mt-14 sm:mt-16">
         <div className="max-w-3xl mx-auto">
           <RainbowText />
           
           <div className="mb-4">
-            <div className="flex justify-center border-b border-[#2A2A2E]/50">
+            <div className="flex justify-center border-b border-[#2A2A2E]">
               <button
-                className={`py-2 px-4 text-[14px] font-medium relative ${
-                  activeTab === 'mint' ? 'text-[#3AABEE]' : 'text-white/80 hover:text-white'
-                }`}
+                className={`py-2 px-4 text-[14px] ${activeTab === 'mint' ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]' : 'text-gray-400 hover:text-white'}`}
                 onClick={() => setActiveTab('mint')}
               >
                 Mint $WOOF
-                {activeTab === 'mint' && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#3AABEE] rounded-full"></span>
-                )}
               </button>
               <button
-                className={`py-2 px-4 text-[14px] font-medium relative ${
-                  activeTab === 'invite' ? 'text-[#3AABEE]' : 'text-white/80 hover:text-white'
-                }`}
+                className={`py-2 px-4 text-[14px] ${activeTab === 'invite' ? 'text-[#3AABEE] border-b-2 border-[#3AABEE]' : 'text-gray-400 hover:text-white'}`}
                 onClick={() => setActiveTab('invite')}
               >
                 Invite & Earn
-                {activeTab === 'invite' && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#3AABEE] rounded-full"></span>
-                )}
               </button>
             </div>
           </div>
@@ -138,12 +128,12 @@ const AirdropPage: React.FC = () => {
                         alt="Dogs GIF" 
                         width={120}
                         height={120}
-                        className="w-full h-full object-cover rounded-xl shadow-lg sm:absolute sm:inset-0"
+                        className="w-full h-full object-cover rounded-lg shadow-lg sm:absolute sm:inset-0"
                         priority
                       />
                     </div>
                   </div>
-                  <div className="mt-4 bg-[#1A1A1A] rounded-xl p-4">
+                  <div className="mt-4 bg-[#1A1A1A] rounded-xl p-3">
                     <div className="flex justify-between items-center mb-3">
                       <span className="text-[14px] text-gray-400">Total Mints:</span>
                       <span className="text-[14px] font-bold text-[#3AABEE]">6,886</span>
@@ -151,22 +141,19 @@ const AirdropPage: React.FC = () => {
                     <h4 className="text-[14px] font-semibold text-gray-300 mb-2">Mint Progress</h4>
                     <div className="w-full bg-[#2A2A2E] rounded-full h-2">
                       <div 
-                        className="bg-gradient-to-r from-[#3AABEE] to-[#2691D9] h-2 rounded-full"
+                        className="bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] h-2 rounded-full"
                         style={{ width: `${(6886 / 10000) * 100}%` }}
                       ></div>
                     </div>
                     <p className="text-[14px] text-gray-400 mt-2">6,886 / 10,000 minted</p>
                   </div>
                 </div>
-
                 <div className="w-full sm:w-2/3">
-                  <h2 className="text-[28px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-3">
-                    Mint $WOOF Tokens
-                  </h2>
+                  <h2 className="text-[20px] sm:text-[28px] font-bold text-[#3AABEE] mb-3">Mint $WOOF Tokens</h2>
                   <p className="text-[14px] mb-4 text-gray-300">
                     Mint 1000 $WOOF tokens and get a chance to win a random wallet with $86k-$120k worth of tokens!
                   </p>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 mb-4">
+                  <div className="bg-[#1A1A1A] rounded-2xl p-4 mb-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-[14px] text-gray-300">Mint Price:</span>
                       <span className="text-[16px] font-bold text-[#3AABEE]">1000 $WOOF</span>
@@ -176,17 +163,14 @@ const AirdropPage: React.FC = () => {
                       <span className="text-[16px] font-bold text-green-500">10%</span>
                     </div>
                   </div>
-
                   <button
                     onClick={handleMint}
-                    className="relative group h-12 w-full rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-[18px] font-bold py-3.5 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl mb-4"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
-                    <span className="text-[16px] font-semibold text-white z-10">Mint $WOOF</span>
+                    Mint $WOOF
                   </button>
-
                   {mintResult && (
-                    <div className={`p-4 rounded-xl mt-4 ${
+                    <div className={`p-4 rounded-xl mb-4 ${
                       mintResult.includes('Congratulations') 
                         ? 'bg-green-500/10 text-green-500' 
                         : 'bg-red-500/10 text-red-500'
@@ -194,8 +178,7 @@ const AirdropPage: React.FC = () => {
                       <p className="text-[14px] font-semibold">{mintResult}</p>
                     </div>
                   )}
-
-                  <p className="text-[12px] text-gray-400 mt-4">
+                  <p className="text-[12px] text-gray-400">
                     <span className="font-semibold text-gray-300">Warning:</span> By participating, you acknowledge that you're risking your funds. You may win or lose your investment. Proceed at your own risk.
                   </p>
                 </div>
@@ -214,12 +197,12 @@ const AirdropPage: React.FC = () => {
                         alt="Invite GIF" 
                         width={120}
                         height={120}
-                        className="w-full h-full object-cover rounded-xl shadow-lg sm:absolute sm:inset-0"
+                        className="w-full h-full object-cover rounded-lg shadow-lg sm:absolute sm:inset-0"
                         priority
                       />
                     </div>
                   </div>
-                  <div className="mt-4 bg-[#1A1A1A] rounded-xl p-4">
+                  <div className="mt-4 bg-[#1A1A1A] rounded-xl p-3">
                     <h4 className="text-[14px] font-semibold text-gray-300 mb-2">Your Referrals</h4>
                     <div className="flex justify-between items-center">
                       <span className="text-[14px] text-gray-400">Total Referrals:</span>
@@ -232,13 +215,11 @@ const AirdropPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="w-full sm:w-2/3">
-                  <h2 className="text-[28px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-3">
-                    Invite & Earn
-                  </h2>
+                  <h2 className="text-[20px] sm:text-[28px] font-bold text-[#3AABEE] mb-3">Invite & Earn</h2>
                   <p className="text-[14px] mb-4 text-gray-300">
                     Invite your friends and earn additional $WOOF tokens! For each friend who successfully mints $WOOF tokens, you'll receive a 5% bonus.
                   </p>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 mb-4">
+                  <div className="bg-[#1A1A1A] p-4 rounded-2xl mb-4">
                     <div className="flex justify-between items-center mb-3">
                       <span className="text-[14px] text-gray-300">Referral Bonus:</span>
                       <span className="text-[14px] font-bold text-green-500">5% per mint</span>
@@ -249,33 +230,28 @@ const AirdropPage: React.FC = () => {
                         type="text"
                         value="https://woodogs.com/airdrop?ref=YOUR_ID"
                         readOnly
-                        className="w-full bg-[#141414] text-gray-200 py-2 px-3 rounded-l-xl text-[14px] border border-[#2A2A2E]"
+                        className="w-full bg-[#141414] text-gray-200 py-2 px-3 rounded-l text-[14px] border border-[#2A2A2E]"
                       />
-                      <button className="relative group h-10 px-6 rounded-r-xl overflow-hidden flex items-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
-                        <span className="text-[14px] font-semibold text-white z-10">Copy</span>
+                      <button
+                        className="bg-[#3AABEE] text-white px-4 py-2 rounded-r hover:bg-[#1E90FF] transition-colors duration-300 text-[14px]"
+                      >
+                        Copy
                       </button>
                     </div>
                   </div>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4">
-                    <h4 className="text-[14px] font-semibold text-gray-200 mb-3">How it works:</h4>
-                    <ul className="space-y-3">
+                  <div className="bg-[#1A1A1A] rounded-2xl p-4">
+                    <h4 className="text-[14px] font-semibold text-gray-200 mb-2">How it works:</h4>
+                    <ul className="space-y-2">
                       <li className="flex items-center text-[14px] text-gray-300">
-                        <div className="relative group h-5 w-5 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] mr-2">
-                          <span className="text-[12px] font-semibold text-white z-10">1</span>
-                        </div>
+                        <span className="w-5 h-5 rounded-full bg-[#3AABEE] flex items-center justify-center text-white mr-2">1</span>
                         Share your referral link with friends
                       </li>
                       <li className="flex items-center text-[14px] text-gray-300">
-                        <div className="relative group h-5 w-5 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] mr-2">
-                          <span className="text-[12px] font-semibold text-white z-10">2</span>
-                        </div>
+                        <span className="w-5 h-5 rounded-full bg-[#3AABEE] flex items-center justify-center text-white mr-2">2</span>
                         Friends mint $WOOF tokens using your link
                       </li>
                       <li className="flex items-center text-[14px] text-gray-300">
-                        <div className="relative group h-5 w-5 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] mr-2">
-                          <span className="text-[12px] font-semibold text-white z-10">3</span>
-                        </div>
+                        <span className="w-5 h-5 rounded-full bg-[#3AABEE] flex items-center justify-center text-white mr-2">3</span>
                         You earn 5% bonus for each mint
                       </li>
                     </ul>

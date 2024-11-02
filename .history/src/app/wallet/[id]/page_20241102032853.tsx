@@ -32,12 +32,28 @@ export default function WalletPage({ params }: WalletPageProps) {
   const [tonAmount, setTonAmount] = useState<string>('N/A');
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [timeLeft, setTimeLeft] = useState<string>('');
+  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
 
   const additionalTokensCount = useMemo(() => {
     if (!wallet) return 5;
     const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return 5 + (seed % 6);
   }, [params.id, wallet]);
+
+  const auctionEndTime = useMemo(() => {
+    if (typeof window === 'undefined') return 0;
+    const storedEndTime = localStorage.getItem(`auctionEndTime_${params.id}`);
+    if (storedEndTime) {
+      return parseInt(storedEndTime, 10);
+    }
+    const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const random = Math.sin(seed) * 10000;
+    const hours = Math.floor(random % 48);
+    const endTime = Date.now() + hours * 3600000;
+    localStorage.setItem(`auctionEndTime_${params.id}`, endTime.toString());
+    return endTime;
+  }, [params.id]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,6 +80,29 @@ export default function WalletPage({ params }: WalletPageProps) {
     fetchData();
   }, [params.id, router]);
 
+  useEffect(() => {
+    const updateTimer = () => {
+      const now = Date.now();
+      const difference = auctionEndTime - now;
+
+      if (difference <= 0) {
+        setIsAuctionEnded(true);
+        setTimeLeft('Auction ended');
+      } else {
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        setTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+        setIsAuctionEnded(false);
+      }
+    };
+
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(timer);
+  }, [auctionEndTime]);
+
   const handleClose = () => {
     router.push('/');
   };
@@ -82,77 +121,89 @@ export default function WalletPage({ params }: WalletPageProps) {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <Header />
-      <main className="flex-grow py-4 px-4 mt-[72px] sm:mt-20 lg:mt-24 overflow-y-auto">
+      <main className="flex-grow py-4 px-4 mt-14 sm:mt-20 lg:mt-24 overflow-y-auto">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 mb-4 border border-[#2A2A2E] relative">
+          <div className="bg-[#141414] rounded-2xl overflow-hidden shadow-2xl p-4 sm:p-6 mb-4 border border-[#2A2A2E] relative">
             {/* Header section */}
-            <div className="flex items-start justify-between mb-6">
+            <div className="flex items-start justify-between mb-4">
               <div className="flex items-center flex-1">
-                <div className="w-16 h-16 rounded-[22%] overflow-hidden mr-4 shadow-lg">
+                <div className="w-16 h-16 rounded-[22%] overflow-hidden mr-3 shadow-lg">
                   <Image src={wallet.icon} alt={wallet.name} width={64} height={64} className="object-cover" />
                 </div>
                 <div className="flex-1">
-                  <h1 className="text-[28px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text mb-2">
-                    {wallet.name}
-                  </h1>
+                  <div className="flex items-center justify-between">
+                    <h1 className="text-[28px] font-bold titanium-gradient">{wallet.name}</h1>
+                    <button 
+                      onClick={handleClose}
+                      className="text-gray-400 hover:text-white transition-colors duration-200 h-[28px] w-[28px] flex items-center justify-center"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-full w-full" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[14px] text-yellow-400 font-medium bg-yellow-400/10 px-3 py-1 rounded-xl">
+                    <span className="text-[16px] text-yellow-400 font-medium bg-yellow-400/10 px-3 py-1 rounded-full shadow-md">
                       {wallet.priceRange}
                     </span>
                     {wallet.isHot && (
-                      <span className="text-[14px] text-orange-500 font-medium bg-orange-500/10 px-3 py-1 rounded-xl animate-pulse">
+                      <span className="text-[16px] text-orange-500 font-medium bg-orange-500/10 px-3 py-1 rounded-full animate-pulse">
                         🔥 Hot
                       </span>
                     )}
                   </div>
                 </div>
               </div>
-              <button 
-                onClick={handleClose}
-                className="text-white/50 hover:text-white/70 transition-colors duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
             
             {/* Description */}
-            <p className="text-[16px] text-gray-300 mb-6 leading-relaxed">{wallet.description}</p>
+            <p className="text-[16px] text-gray-300 mb-4 leading-relaxed">{wallet.description}</p>
             
             {/* Price section */}
-            <div className="bg-[#1A1A1A] rounded-xl p-4 mb-6">
-              <div className="flex flex-col gap-3">
+            <div className="bg-[#1A1A1A] rounded-xl p-4 mb-4 shadow-inner">
+              <div className="flex flex-col gap-2">
                 <div className="flex items-baseline">
-                  <span className="text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
+                  <span className="text-[24px] font-bold bg-gradient-to-r from-[#A0D8EF] to-[#3AABEE] text-transparent bg-clip-text">
                     ${wallet.priceUSD}
                   </span>
                   <span className="text-[14px] text-gray-400 ml-2">
                     ≈ {tonAmount} TON
                   </span>
                 </div>
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center">
-                    <span className="text-[14px] text-gray-400">Bid:</span>
-                    <span className="text-[16px] font-semibold text-green-500 ml-2">${wallet.auctionPriceUSD}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-[14px] text-gray-400">Buy:</span>
-                    <span className="text-[16px] font-semibold text-yellow-500 ml-2">${buyNowPrice}</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center">
+                      <span className="text-[14px] text-gray-400">Bid:</span>
+                      <span className="text-[16px] font-semibold text-green-500 ml-2">${wallet.auctionPriceUSD}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-[14px] text-gray-400">Buy:</span>
+                      <span className="text-[16px] font-semibold text-yellow-500 ml-2">${buyNowPrice}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Auction timer section */}
+            <div className="bg-[#1A1A1A] rounded-xl p-4 mb-4 shadow-inner">
+              <div className="flex items-center justify-between">
+                <span className="text-[16px] text-gray-400">
+                  {isAuctionEnded ? 'Auction Status:' : 'Auction Ends in:'}
+                </span>
+                <span className="text-[20px] font-semibold text-[#3AABEE]">
+                  {timeLeft}
+                </span>
+              </div>
+            </div>
+            
             {/* Action buttons */}
-            <div className="flex flex-col gap-3 mb-6">
-              <button className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
-                <span className="text-[16px] font-semibold text-black z-10">Place Bid: ${wallet.auctionPriceUSD}</span>
+            <div className="flex flex-col gap-2.5 mb-4">
+              <button className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black text-[18px] font-bold py-3.5 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+                Place Bid: ${wallet.auctionPriceUSD}
               </button>
-              <button className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
-                <span className="text-[16px] font-semibold text-white z-10">Buy Now: ${buyNowPrice}</span>
+              <button className="w-full bg-gradient-to-r from-[#3AABEE] to-[#1E90FF] text-white text-[18px] font-bold py-3.5 px-6 rounded-full hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+                Buy Now: ${buyNowPrice}
               </button>
             </div>
 

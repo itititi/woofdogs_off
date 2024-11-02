@@ -74,7 +74,7 @@ const Header: React.FC = () => {
   const renderWalletButton = () => {
     if (!mounted || isConnected === null) {
       return (
-        <div className="bg-[#141414] text-white py-2 px-4 rounded-xl text-[14px] font-medium h-10 w-[140px] flex items-center justify-center border border-[#2A2A2E]">
+        <div className="bg-[#141414] text-white py-2 px-4 rounded-lg text-[14px] font-medium h-10 w-[140px] flex items-center justify-center border border-[#2A2A2E]">
           <div className="w-3 h-3 rounded-full border-2 border-[#3AABEE] border-t-transparent animate-spin"></div>
         </div>
       );
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
       return (
         <button 
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="bg-[#141414]/80 backdrop-blur-md text-white py-2 px-4 rounded-xl text-[14px] font-medium flex items-center hover:bg-[#2A2A2E] transition-all duration-300 h-10 border border-[#2A2A2E]/50 min-w-[160px] justify-between group relative overflow-hidden"
+          className="bg-[#141414]/80 backdrop-blur-md text-white py-2 px-4 rounded-lg text-[14px] font-medium flex items-center hover:bg-[#2A2A2E] transition-all duration-300 h-10 border border-[#2A2A2E]/50 min-w-[160px] justify-between group relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-[#3AABEE]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div className="flex items-center space-x-2 z-10">
@@ -110,7 +110,7 @@ const Header: React.FC = () => {
     return (
       <button
         onClick={handleConnect}
-        className="relative group h-10 px-6 rounded-xl overflow-hidden flex items-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300"
+        className="relative group h-10 px-6 rounded-lg overflow-hidden flex items-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
         <span className="text-[14px] font-semibold text-white z-10">Connect Wallet</span>
@@ -121,11 +121,11 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="bg-black/80 backdrop-blur-md text-white fixed top-0 left-0 right-0 z-50 border-b border-[#2A2A2E]/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
           <div className="flex items-center justify-between h-[72px]">
             <Link href="/" className="flex items-center flex-shrink-0">
-              <Image src="/woodogslogo.svg" alt="WooDogs Logo" width={32} height={32} className="mr-2 invert" />
-              <span className="font-bold text-[20px] whitespace-nowrap">WooDogs</span>
+              <Image src="/woodogslogo.svg" alt="WooDogs Logo" width={36} height={36} className="mr-3 invert" />
+              <span className="font-bold text-[22px] whitespace-nowrap">WooDogs</span>
             </Link>
             
             {!isMobileOrTablet && (
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
                 {navItems.map((item, index) => (
                   item.isButton ? (
                     <Link key={index} href={item.href} className="flex-shrink-0">
-                      <button className="relative group h-10 px-6 rounded-xl overflow-hidden flex items-center bg-gradient-to-br from-[#FF3366] to-[#FF6B6B] hover:from-[#FF6B6B] hover:to-[#FF3366] transition-all duration-300">
+                      <button className="relative group h-10 px-6 rounded-lg overflow-hidden flex items-center bg-gradient-to-br from-[#FF3366] to-[#FF6B6B] hover:from-[#FF6B6B] hover:to-[#FF3366] transition-all duration-300">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
                         <span className="text-[14px] font-semibold text-white z-10">{item.label}</span>
                       </button>
@@ -170,7 +170,7 @@ const Header: React.FC = () => {
               </nav>
             )}
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4 flex-shrink-0">
               <div className="relative">
                 {renderWalletButton()}
                 {isConnected && isDropdownOpen && (
@@ -200,7 +200,7 @@ const Header: React.FC = () => {
               </div>
               {isMobileOrTablet && (
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white flex-shrink-0">
-                  {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                  {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
               )}
             </div>
@@ -211,14 +211,14 @@ const Header: React.FC = () => {
       {/* Mobile Menu */}
       {isMenuOpen && isMobileOrTablet && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-40 pt-20">
-          <div className="max-w-md mx-auto px-4 h-[calc(100vh-80px)] flex flex-col">
-            <nav className="flex flex-col space-y-6 flex-1">
+          <div className="max-w-md mx-auto px-4 py-6">
+            <nav className="flex flex-col space-y-6">
               {navItems.map((item, index) => (
                 item.isButton ? (
                   <Link 
                     key={index}
                     href={item.href}
-                    className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FF3366] to-[#FF6B6B] hover:from-[#FF6B6B] hover:to-[#FF3366] transition-all duration-300"
+                    className="relative group h-12 rounded-lg overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FF3366] to-[#FF6B6B] hover:from-[#FF6B6B] hover:to-[#FF3366] transition-all duration-300"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
@@ -250,14 +250,6 @@ const Header: React.FC = () => {
                 )
               ))}
             </nav>
-            <div className="pb-[calc(120px+env(safe-area-inset-bottom))]">
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 w-full"
-              >
-                <span className="text-[16px] font-semibold text-black z-10">Close</span>
-              </button>
-            </div>
           </div>
         </div>
       )}
