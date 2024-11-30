@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getAllWalletOffers, WalletOffer } from '@/data/walletOffers';
 import { useSearch } from './SearchContext';
-import {SendTransactionRequest} from "@tonconnect/sdk";
 
 interface IPhoneOffer {
   id: string;
