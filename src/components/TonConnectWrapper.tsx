@@ -8,13 +8,6 @@ export function TonConnectWrapper({ children }: { children: React.ReactNode }) {
   return (
       <TonConnectUIProvider
         manifestUrl={manifestUrl}
-        connectorConfiguration={{
-          manifestUrl: manifestUrl,
-          buttonRootId: 'ton-connect-button',
-          uiPreferences: {
-            theme: 'DARK'
-          }
-        }}
       >
         {children}
       </TonConnectUIProvider>
