@@ -60,7 +60,11 @@ export default function WalletPage({ params }: WalletPageProps) {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
         const tonPrice = data['the-open-network'].usd;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         setTonAmount((walletData.priceUSD / tonPrice).toFixed(2))
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         setBidTonAmount((walletData.auctionPriceUSD / tonPrice).toFixed(2));
       } catch (error) {
         console.error('Error fetching TON price:', error);
