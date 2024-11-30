@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#141414]/80 backdrop-blur-md border-t border-[#2A2A2E]/50">
+    <footer className="bg-[#141414]/80 backdrop-blur-md border-t border-[#2A2A2E]/50 my-8">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           {/* Logo and Description */}

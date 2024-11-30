@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getAllWalletOffers, WalletOffer } from '@/data/walletOffers';
 import { useSearch } from './SearchContext';
+import {SendTransactionRequest} from "@tonconnect/sdk";
 
 interface IPhoneOffer {
   id: string;
@@ -21,6 +22,7 @@ interface IPhoneOffer {
 
 const WalletCard: React.FC<{ offer: WalletOffer | IPhoneOffer }> = ({ offer }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -56,12 +58,12 @@ const WalletCard: React.FC<{ offer: WalletOffer | IPhoneOffer }> = ({ offer }) =
           <div className="flex items-center flex-1">
             <div className="w-14 h-14 rounded-[22%] overflow-hidden mr-4 shadow-lg relative">
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <Image 
-                src={offer.icon} 
-                alt={offer.name} 
-                width={56} 
-                height={56} 
-                className="object-cover w-full h-full" 
+              <Image
+                src={offer.icon}
+                alt={offer.name}
+                width={56}
+                height={56}
+                className="object-cover w-full h-full"
               />
             </div>
             <div className="flex-1">
@@ -154,12 +156,12 @@ const WalletCard: React.FC<{ offer: WalletOffer | IPhoneOffer }> = ({ offer }) =
         </div>
 
         {/* Description */}
-        <p className="text-[14px] text-gray-300 mb-4 line-clamp-1 overflow-hidden text-ellipsis">
+        <p className="text-[14px] text-gray-300 mb-4 text-ellipsis">
           {offer.description}
         </p>
 
         {/* Price section */}
-        <div className="bg-[#1A1A1A] rounded-xl p-4 mt-auto">
+        <div className="bg-[#1A1A1A] rounded-xl p-4 pb-2 mt-auto">
           <div className="flex flex-col gap-3">
             <div className="flex items-baseline justify-between">
               <span className="text-[24px] sm:text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
@@ -328,10 +330,10 @@ const WalletShowcase: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-black flex-grow py-4 mt-14 sm:mt-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-          <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12">
+      // <div className="bg-black flex-grow py-4 mt-14 sm:mt-16">
+        <div className="bg-black flex-grow max-w-7xl mx-auto">
+          {/*<div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>*/}
+          <div className="px-2 sm:px-8 md:px-8 lg:px-10 pt-10 sm:pt-8 md:pt-8  lg:pt-8">
             <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
               Hot TON Wallets
             </h2>
@@ -354,14 +356,14 @@ const WalletShowcase: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      // </div>
     );
   }
 
   if (filteredOffers.length === 0) {
     return (
-      <div className="bg-black min-h-screen pt-16 sm:pt-20 pb-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto w-full text-center">
+      // <div className="bg-black min-h-screen pt-16 sm:pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="bg-black flex-grow max-w-7xl mx-auto">
           <div className="mb-6 transition-all duration-300" style={{ height: '160px' }}>
             <Image 
               src="/notfound.gif" 
@@ -378,22 +380,22 @@ const WalletShowcase: React.FC = () => {
             We couldn't find any wallets matching your search. Try different keywords or browse our available options.
           </p>
         </div>
-      </div>
+      // {/*</div>*/}
     );
   }
 
   return (
-    <div className="bg-black flex-grow py-4 mt-[72px] sm:mt-20 lg:mt-24">
-      <div className="max-w-7xl mx-auto">
+    // <div className="bg-black flex-grow py-4 mt-4 sm:mt-8 lg:mt-8">
+      <div className="bg-black flex-grow max-w-7xl mx-auto">
         {hotOffers.length > 0 && (
           <>
-            <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-            <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12">
+            {/*<div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>*/}
+            <div className="px-2 sm:px-8 md:px-8 lg:px-10 pt-10 sm:pt-8 md:pt-8  lg:pt-8">
               <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
                 Hot TON Wallets
               </h2>
               <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-4 mb-12 sm:mb-14 lg:mb-16">
-                {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer} />)}
+                {hotOffers.map((offer) => <WalletCard key={offer.id} offer={offer}/>)}
               </div>
             </div>
           </>
@@ -402,7 +404,7 @@ const WalletShowcase: React.FC = () => {
         {regularOffers.length > 0 && (
           <>
             <div className="border-t border-[#2A2A2E]/50 backdrop-blur-sm"></div>
-            <div className="px-6 sm:px-8 lg:px-10 pt-8 sm:pt-10 lg:pt-12 pb-8">
+            <div className="px-2 sm:px-8 md:px-8 lg:px-10 pt-10 sm:pt-8 md:pt-8  lg:pt-8">
               <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
                 More TON Wallets
               </h2>
@@ -413,7 +415,7 @@ const WalletShowcase: React.FC = () => {
           </>
         )}
       </div>
-    </div>
+    // </div>
   );
 };
 

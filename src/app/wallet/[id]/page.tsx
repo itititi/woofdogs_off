@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import WalletSkeleton from '@/components/WalletSkeleton';
 import { WalletOffer } from '@/data/walletOffers';
+import {SendTransactionRequest} from "@tonconnect/sdk";
+import {useTonConnectUI, useTonWallet} from '@tonconnect/ui-react';
+import {toNano} from "@ton/core";
 
 interface WalletPageProps {
   params: {
@@ -28,17 +31,21 @@ const getWalletContents = (walletName: string) => {
 };
 
 export default function WalletPage({ params }: WalletPageProps) {
+  const isConnected = useTonWallet();
   const [wallet, setWallet] = useState<WalletOffer | null>(null);
-  const [tonAmount, setTonAmount] = useState<string>('N/A');
+  const [tonAmount, setTonAmount] = useState<number | null>(null);
+  const [bidTonAmount, setBidTonAmount] = useState<number| null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-
+  const [tonConnectUI] = useTonConnectUI();
   const additionalTokensCount = useMemo(() => {
     if (!wallet) return 5;
     const seed = params.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return 5 + (seed % 6);
   }, [params.id, wallet]);
-
+  useEffect(() => {
+    console.log('Wallet connected:', isConnected); // Логирование состояния подключения
+  }, [isConnected]);
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -53,7 +60,8 @@ export default function WalletPage({ params }: WalletPageProps) {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
         const tonPrice = data['the-open-network'].usd;
-        setTonAmount((walletData.priceUSD / tonPrice).toFixed(2));
+        setTonAmount((walletData.priceUSD / tonPrice).toFixed(2))
+        setBidTonAmount((walletData.auctionPriceUSD / tonPrice).toFixed(2));
       } catch (error) {
         console.error('Error fetching TON price:', error);
       }
@@ -67,7 +75,25 @@ export default function WalletPage({ params }: WalletPageProps) {
   const handleClose = () => {
     router.push('/');
   };
+  const buy: SendTransactionRequest = {
+    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    messages: [
+      {
+        address: "0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-",
+        amount: toNano(tonAmount !== null ? tonAmount : 0).toString(), // Ensure tonAmount is not null
+      },
+    ],
+  };
 
+  const bid: SendTransactionRequest = {
+    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    messages: [
+      {
+        address: "0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-",
+        amount: toNano(bidTonAmount !== null ? bidTonAmount : 0).toString(), // Ensure bidTonAmount is not null
+      },
+    ],
+  };
   if (isLoading) {
     return <WalletSkeleton />;
   }
@@ -146,12 +172,30 @@ export default function WalletPage({ params }: WalletPageProps) {
 
             {/* Action buttons */}
             <div className="flex flex-col gap-3 mb-6">
-              <button className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
+              <button
+                  onClick={() => tonConnectUI.sendTransaction(bid)}
+                  disabled={!isConnected} // Disable button if wallet is not connected
+                  className={`relative group h-12 rounded-xl overflow-hidden flex items-center justify-center transition-all duration-300 ${
+                      isConnected
+                          ? 'bg-gradient-to-br from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700]'
+                          : 'bg-gradient-to-br from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] blur-sm cursor-not-allowed'
+                  }`}
+              >
+                <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
                 <span className="text-[16px] font-semibold text-black z-10">Place Bid: ${wallet.auctionPriceUSD}</span>
               </button>
-              <button className="relative group h-12 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
+              <button
+                  onClick={() => tonConnectUI.sendTransaction(buy)}
+                  disabled={!isConnected} // Disable button if wallet is not connected
+                  className={`relative group h-12 rounded-xl overflow-hidden flex items-center justify-center transition-all duration-300 ${
+                      isConnected
+                          ? 'bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5]'
+                          : 'bg-gradient-to-br from-[#3AABEE] to-[#2691D9] hover:from-[#2691D9] hover:to-[#1E88E5] blur-sm cursor-not-allowed'
+                  }`}
+              >
+                <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
                 <span className="text-[16px] font-semibold text-white z-10">Buy Now: ${buyNowPrice}</span>
               </button>
             </div>
@@ -161,16 +205,16 @@ export default function WalletPage({ params }: WalletPageProps) {
               <h3 className="text-[20px] font-bold titanium-gradient mb-3">Included Tokens</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {wallet.tokens.map((tokenData, index) => (
-                  <div key={index} className="bg-[#1A1A1A] rounded-lg p-2.5 flex items-center shadow-md">
-                    <Image
-                      src={tokenData.token.logo}
-                      alt={tokenData.token.name}
-                      width={20}
-                      height={20}
-                      className="rounded-full mr-2"
-                    />
-                    <span className="text-[16px] font-medium">{tokenData.token.symbol}</span>
-                  </div>
+                    <div key={index} className="bg-[#1A1A1A] rounded-lg p-2.5 flex items-center shadow-md">
+                      <Image
+                          src={tokenData.token.logo}
+                          alt={tokenData.token.name}
+                          width={20}
+                          height={20}
+                          className="rounded-full mr-2"
+                      />
+                      <span className="text-[16px] font-medium">{tokenData.token.symbol}</span>
+                    </div>
                 ))}
                 <div className="bg-[#1A1A1A] rounded-lg p-2.5 flex items-center justify-center">
                   <span className="text-[16px] font-medium text-[#3AABEE]">
@@ -185,11 +229,11 @@ export default function WalletPage({ params }: WalletPageProps) {
           <div className="bg-[#141414] rounded-2xl overflow-hidden shadow-2xl p-4 sm:p-6 border border-[#2A2A2E]">
             <div className="flex items-center mb-4">
               <Image
-                src="/inside.gif"
-                alt="What's Inside"
-                width={28}
-                height={28}
-                className="mr-3"
+                  src="/inside.gif"
+                  alt="What's Inside"
+                  width={28}
+                  height={28}
+                  className="mr-3"
               />
               <h2 className="text-[24px] font-bold titanium-gradient">What You'll Get</h2>
             </div>

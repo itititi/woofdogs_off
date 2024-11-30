@@ -74,8 +74,8 @@ const initialWalletOffers: WalletOffer[] = [
     "ton-wallet-1",
     "TON Wallet",
     "/tonwallet.jpg",
-    "~23kk",
-    2300,
+    "~200",
+    200,
     true,
     "TON Wallet with various features and balance. Great for intermediate users.",
     "23/93",
@@ -85,7 +85,7 @@ const initialWalletOffers: WalletOffer[] = [
     "cryptobot-1",
     "CryptoBot",
     "/cryptobot.jpg",
-    "~15kk",
+    "~1.5k",
     1500,
     true,
     "CryptoBot wallet with Telegram integration. Perfect for beginners.",
@@ -96,8 +96,8 @@ const initialWalletOffers: WalletOffer[] = [
     "ton-space-1",
     "TON Space",
     "/tonspace.jpg",
-    "~18kk",
-    1800,
+    "~25",
+    25,
     true,
     "TON Space wallet with advanced features. Ideal for experienced traders.",
     "33/80",
@@ -107,30 +107,31 @@ const initialWalletOffers: WalletOffer[] = [
 
 export const getWalletOffers = (): WalletOffer[] => {
   if (typeof window !== 'undefined') {
-    const storedOffers = localStorage.getItem('walletOffers');
-    if (storedOffers) {
-      return JSON.parse(storedOffers);
-    }
+    // const storedOffers = localStorage.getItem('walletOffers');
+    // if (storedOffers) {
+    //   return JSON.parse(storedOffers);
+    // }
+    // localStorage.setItem('walletOffers', JSON.stringify(initialWalletOffers));
     localStorage.setItem('walletOffers', JSON.stringify(initialWalletOffers));
   }
   return initialWalletOffers;
 };
 
-export const updateWalletOffer = (updatedOffer: WalletOffer) => {
-  if (typeof window !== 'undefined') {
-    const offers = getWalletOffers();
-    const index = offers.findIndex(offer => offer.id === updatedOffer.id);
-    if (index !== -1) {
-      offers[index] = updatedOffer;
-      localStorage.setItem('walletOffers', JSON.stringify(offers));
-    }
-  }
-};
-
-export const getWalletOfferById = (id: string): WalletOffer | undefined => {
-  const offers = getWalletOffers();
-  return offers.find(offer => offer.id === id);
-};
+// export const updateWalletOffer = (updatedOffer: WalletOffer) => {
+//   if (typeof window !== 'undefined') {
+//     const offers = getWalletOffers();
+//     const index = offers.findIndex(offer => offer.id === updatedOffer.id);
+//     if (index !== -1) {
+//       offers[index] = updatedOffer;
+//       localStorage.setItem('walletOffers', JSON.stringify(offers));
+//     }
+//   }
+// };
+//
+// export const getWalletOfferById = (id: string): WalletOffer | undefined => {
+//   const offers = getWalletOffers();
+//   return offers.find(offer => offer.id === id);
+// };
 
 // Функция для создания дополнительных предложений
 const createMoreOffers = (baseOffers: WalletOffer[]): WalletOffer[] => {
