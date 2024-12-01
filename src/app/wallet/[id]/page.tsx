@@ -4,7 +4,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { getWalletData } from '@/data/getWalletData';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/Header';
 import WalletSkeleton from '@/components/WalletSkeleton';
 import { WalletOffer } from '@/data/walletOffers';
 import {SendTransactionRequest} from "@tonconnect/sdk";
@@ -34,7 +33,6 @@ export default function WalletPage({ params }: WalletPageProps) {
   const isConnected = useTonWallet();
   const [wallet, setWallet] = useState<WalletOffer | null>(null);
   const [tonAmount, setTonAmount] = useState<number | null>(null);
-  const [bidTonAmount, setBidTonAmount] = useState<number| null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const [tonConnectUI] = useTonConnectUI();
@@ -89,15 +87,6 @@ export default function WalletPage({ params }: WalletPageProps) {
     ],
   };
 
-  const bid: SendTransactionRequest = {
-    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
-    messages: [
-      {
-        address: "0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-",
-        amount: toNano(bidTonAmount !== null ? bidTonAmount : 0).toString(), // Ensure bidTonAmount is not null
-      },
-    ],
-  };
   if (isLoading) {
     return <WalletSkeleton />;
   }
@@ -107,12 +96,10 @@ export default function WalletPage({ params }: WalletPageProps) {
   }
 
   const walletContents = getWalletContents(wallet.name);
-  const buyNowPrice = Math.round((wallet.priceUSD + wallet.auctionPriceUSD) / 2);
-
   return (
+
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <Header />
-      <main className="flex-grow py-4 px-4 mt-[72px] sm:mt-20 lg:mt-24 overflow-y-auto">
+      <main className="flex-grow py-4 px-4 overflow-y-auto">
         <div className="max-w-3xl mx-auto">
           <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg p-4 sm:p-6 mb-4 border border-[#2A2A2E] relative">
             {/* Header section */}
@@ -149,46 +136,39 @@ export default function WalletPage({ params }: WalletPageProps) {
             
             {/* Description */}
             <p className="text-[16px] text-gray-300 mb-6 leading-relaxed">{wallet.description}</p>
-            
+
             {/* Price section */}
             <div className="bg-[#1A1A1A] rounded-xl p-4 mb-6">
               <div className="flex flex-col gap-3">
-                <div className="flex items-baseline">
-                  <span className="text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
-                    ${wallet.priceUSD}
-                  </span>
-                  <span className="text-[14px] text-gray-400 ml-2">
-                    ≈ {tonAmount} TON
-                  </span>
-                </div>
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center">
-                    <span className="text-[14px] text-gray-400">Bid:</span>
-                    <span className="text-[16px] font-semibold text-green-500 ml-2">${wallet.auctionPriceUSD}</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-baseline">
+                      <span
+                          className="text-[24px] font-bold bg-gradient-to-r from-white/90 to-white/60 text-transparent bg-clip-text">
+                        ${wallet.priceUSD}
+                      </span>
+                      <span className="text-[14px] text-gray-400 ml-2">
+                        ≈ {tonAmount} TON
+                      </span>
+
+                    </div>
+                    <span className="text-[14px] text-gray-400">Wallet Balance</span>
+
                   </div>
-                  <div className="flex items-center">
-                    <span className="text-[14px] text-gray-400">Buy:</span>
-                    <span className="text-[16px] font-semibold text-yellow-500 ml-2">${buyNowPrice}</span>
+                  <div className="flex flex-col items-end">
+                    <div className="flex items-baseline">
+                    <span className="text-[24px] font-bold text-green-500">
+                      ${wallet.auctionPriceUSD}
+                    </span>
+                    </div>
+                      <span className="text-[14px] text-gray-400">Price</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
             {/* Action buttons */}
             <div className="flex flex-col gap-3 mb-6">
-              <button
-                  onClick={() => tonConnectUI.sendTransaction(bid)}
-                  disabled={!isConnected} // Disable button if wallet is not connected
-                  className={`relative group h-12 rounded-xl overflow-hidden flex items-center justify-center transition-all duration-300 ${
-                      isConnected
-                          ? 'bg-gradient-to-br from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700]'
-                          : 'bg-gradient-to-br from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] blur-sm cursor-not-allowed'
-                  }`}
-              >
-                <div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
-                <span className="text-[16px] font-semibold text-black z-10">Place Bid: ${wallet.auctionPriceUSD}</span>
-              </button>
               <button
                   onClick={() => tonConnectUI.sendTransaction(buy)}
                   disabled={!isConnected} // Disable button if wallet is not connected
@@ -200,7 +180,7 @@ export default function WalletPage({ params }: WalletPageProps) {
               >
                 <div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
-                <span className="text-[16px] font-semibold text-white z-10">Buy Now: ${buyNowPrice}</span>
+                <span className="text-[16px] font-semibold text-white z-10">Buy Now: ${wallet.auctionPriceUSD}</span>
               </button>
             </div>
 
@@ -246,7 +226,7 @@ export default function WalletPage({ params }: WalletPageProps) {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span className="text-[16px]">{walletContents}</span>
+                <span className="">{walletContents}</span>
               </li>
               <li className="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3 text-[#3AABEE]" viewBox="0 0 20 20" fill="currentColor">

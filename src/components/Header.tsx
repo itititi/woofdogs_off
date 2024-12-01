@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
-import { TonConnectButton } from '@tonconnect/ui-react';
 import Avatar from 'boring-avatars';
 
 const Header: React.FC = () => {
@@ -77,7 +76,7 @@ const Header: React.FC = () => {
   };
 
   return (
-      <header className="bg-black/80 backdrop-blur-md text-white fixed top-0 left-0 right-0 z-50 border-b border-[#2A2A2E]/50">
+      <header className="bg-black/80 backdrop-blur-md text-white fixed top-0 left-0 right-0 z-50 border-b border-[#2A2A2E]/50 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="flex items-center justify-between h-[72px]">
             <Link href="/" className="flex items-center flex-shrink-0">
@@ -129,19 +128,7 @@ const Header: React.FC = () => {
             )}
 
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                {walletAddress && (
-                    <div className="w-7 h-7 rounded-full overflow-hidden">
-                      <Avatar
-                          size={28}
-                          name={walletAddress}
-                          variant="beam"
-                          colors={getAvatarColors(walletAddress)}
-                      />
-                    </div>
-                )}
-                <TonConnectButton />
-              </div>
+
               {isMobileOrTablet && (
                   <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white flex-shrink-0">
                     {isMenuOpen ? <X size={22} /> : <Menu size={22} />}

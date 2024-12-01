@@ -4,6 +4,8 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Providers } from './providers';
+import Header from "@/components/Header";
+import React from "react";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,15 +28,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <meta 
-          name="viewport" 
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </head>
+
       <body className={`flex flex-col min-h-screen ${inter.className}`}>
         <Providers>
           <LanguageProvider>
+            <div className={'pb-20'}>
+              <Header />
+            </div>
             {children}
             <Footer />
           </LanguageProvider>
